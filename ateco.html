@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GDS — Coefficienti ATECO 2025 & Redditività</title>
+<title>GDS — Motore ATECO per Regime Forfettario</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -108,12 +108,20 @@ select.cinput{width:auto}
 .ip-t{font-size:13px;font-weight:700;margin-bottom:5px}
 .ip-x{font-size:12px;color:var(--muted2);line-height:1.6}
 .nores{text-align:center;padding:48px 32px;display:none}
+.sres-header{padding:18px 32px;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted2)}
+.sres-grid{padding:20px 32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.sres-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .2s,background .2s}
+.sres-card:hover{border-color:var(--blue);background:var(--blue-dim)}
+.sres-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sres-ic{font-size:16px}
+.sres-q{font-size:13px;font-weight:700;margin-left:auto}
+.sres-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.4}
 .nores p{color:var(--muted2);font-size:14px;margin-top:10px}
 footer{border-top:1px solid var(--border);padding:28px 32px;text-align:center;font-size:12px;color:var(--muted);max-width:960px;margin:0 auto}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
 @media(max-width:650px){
   nav{padding:0 16px}.logo-tagline{display:none}
-  .hero,.cats,.rs,.msec,.ipr{padding:0 16px}
+  .hero,.rs,.msec,.ipr{padding:0 16px}
   .hero{padding-top:48px;padding-bottom:32px}
   .rh{flex-direction:column}.cbox{width:100%;min-width:auto}
   .rgrid{grid-template-columns:1fr}.ib{border-right:none!important}
@@ -135,29 +143,26 @@ footer{border-top:1px solid var(--border);padding:28px 32px;text-align:center;fo
 </nav>
 
 <div class="hero">
-  <div class="hero-chip">⚡ Classificazione ATECO 2025 — ISTAT</div>
-  <h1>Trova il tuo<br><span class="ag">Coefficiente</span> di <span class="as">Redditività</span></h1>
-  <p>Cerca il tuo codice ATECO 2025 per il coefficiente nel regime forfettario, calcolare l'imposta e leggere la descrizione ufficiale ISTAT.</p>
+  <div class="hero-chip">⚡ ATECO 2025 — Regime Forfettario</div>
+  <h1>Motore <span class="ag">ATECO</span> per <span class="as">regime forfettario</span></h1>
+  <p>Cerca per codice, attività o parola chiave: trova il coefficiente di redditività, calcola l'imposta e leggi la descrizione ufficiale ISTAT.</p>
   <div class="sw">
     <div class="sr">
       <div class="sb">
         <div class="si-ic">🔍</div>
-        <input type="text" id="si" placeholder="Es: 62.10, programmazione, avvocato, ristorante, parrucchiere…" autocomplete="off" oninput="onInput(this.value)" onkeydown="onKey(event)"/>
+        <input type="text" id="si" placeholder="Codice, attività o parola chiave: es. avvocato, 62.10, grafico…" autocomplete="off" oninput="onInput(this.value)" onkeydown="onKey(event)"/>
         <button class="sbtn" onclick="doSearch()">Cerca</button>
       </div>
       <div class="sug" id="sug"></div>
     </div>
-    <div class="sh">💡 Cerca per codice (es. 69.20) o parola chiave (es. "geometra", "commercialista", "idraulico")</div>
+    <div class="sh">💡 Cerca per codice (es. 69.20), attività, descrizione o settore — poi seleziona il risultato</div>
   </div>
 </div>
 
 <div class="rs" id="rs"><div class="rc" id="rc"></div></div>
 <div class="nores" id="nr"><div style="font-size:48px">🔎</div><p>Nessun risultato per "<span id="nrq"></span>". Prova con un termine diverso.</p></div>
 
-<div class="cats">
-  <div class="ct">⚡ Codici più cercati</div>
-  <div class="cgrid" id="cg"></div>
-</div>
+
 <div class="msec">
   <div class="ct">📂 Sfoglia per categoria</div>
   <div class="mgrid" id="mg"></div>
@@ -194,9 +199,9 @@ function srch(v){
   const isCode=/^\d/.test(q);
   return DB.filter(a=>{
     if(isCode) return norm(a.c).startsWith(q) || a.c.startsWith(v.trim());
-    const hay=norm([a.c,a.n,a.nc,a.nd,a.ns].join(' '));
+    const hay=norm([a.c,a.n,a.nc,a.nd,a.ns,a.d||''].join(' '));
     return q.split(/\s+/).filter(Boolean).every(w=>hay.includes(w));
-  }).slice(0,12);
+  }).slice(0,20);
 }
 
 function onInput(v){
@@ -227,7 +232,24 @@ function doSearch(){
     document.getElementById('nrq').textContent=v;
     return;
   }
-  show(res[0].c);
+  document.getElementById('nr').style.display='none';
+  if(res.length===1){show(res[0].c);return;}
+  let cards='';
+  res.forEach(function(r){
+    const c=CCOL[r.q]||'var(--green)';
+    const ic=SICONS[r.s]||'📋';
+    cards+='<div class="sres-card" onclick="show(\''+r.c+'\')">'+
+      '<div class="sres-top"><span class="sres-ic">'+ic+'</span>'+
+      '<span class="si2-code">'+r.c+'</span>'+
+      '<span class="sres-q" style="color:'+c+'">'+r.q+'%</span></div>'+
+      '<div class="sres-name">'+r.n+'</div>'+
+      '</div>';
+  });
+  document.getElementById('rc').innerHTML=
+    '<div class="sres-header">'+res.length+' risultati per &ldquo;'+v+'&rdquo; &mdash; clicca per i dettagli</div>'+
+    '<div class="sres-grid">'+cards+'</div>';
+  document.getElementById('rs').style.display='block';
+  document.getElementById('rs').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function show(code){
@@ -329,18 +351,6 @@ function calc(q){
   cr.style.display='block';
 }
 
-function initQuick(){
-  const g=document.getElementById('cg');
-  QUICK.forEach(code=>{
-    const it=DB.find(a=>a.c===code);
-    if(!it) return;
-    const ic=SICONS[it.s]||'📋';
-    const el=document.createElement('div');
-    el.className='cc';el.onclick=()=>show(it.c);
-    el.innerHTML=`<div class="cc-ic">${ic}</div><div><div class="cc-n">${it.n}</div><div class="cc-q">${it.q}%</div></div>`;
-    g.appendChild(el);
-  });
-}
 
 function initMacro(){
   const g=document.getElementById('mg');
@@ -357,7 +367,7 @@ function initMacro(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  initQuick(); initMacro();
+  initMacro();
   document.addEventListener('click',e=>{
     if(!e.target.closest('.sr')) document.getElementById('sug').style.display='none';
   });
