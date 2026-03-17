@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide – GDS Giussani Data Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .guide-card {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 36px 32px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .guide-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .guide-icon { font-size: 44px; line-height: 1; }
+  .guide-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted2);
+  }
+  .guide-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); line-height: 1.3; }
+  .guide-desc { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.7; flex: 1; }
+  .guide-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .guide-topic {
+    font-size: 11px; font-weight: 500;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 100px; padding: 3px 10px; color: var(--muted2);
+  }
+  .guide-download {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 11px 20px;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    text-decoration: none; transition: border-color 0.2s, background 0.2s;
+    margin-top: 8px; width: fit-content;
+  }
+  .guide-download:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+  .guide-download.soon { color: var(--muted); cursor: default; }
+  .guide-download.soon:hover { border-color: var(--border2); background: var(--surface2); }
+  .soon-badge { font-size: 9px; font-weight: 600; background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(251,188,5,0.25); border-radius: 4px; padding: 1px 6px; }
+  .newsletter-box {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 48px;
+    text-align: center; max-width: 600px; margin: 0 auto;
+  }
+  .newsletter-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .newsletter-sub { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 28px; }
+  .newsletter-form { display: flex; gap: 12px; max-width: 420px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .newsletter-input {
+    flex: 1; min-width: 220px; background: var(--surface2); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 12px 16px; font-size: 14px;
+    color: var(--text); font-family: 'Poppins', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .newsletter-input:focus { border-color: var(--blue); }
+  .newsletter-input::placeholder { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- == NAVBAR == -->
+  <nav>
+    <a href="index.html" class="logo-inline">
+      <div class="logo-letters"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+      <div class="logo-sep"></div>
+      <span class="logo-name">Giussani Data Solutions</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="percorsi.html">Percorsi</a></li>
+      <li><a href="strumenti.html">Strumenti</a></li>
+      <li><a href="guide.html" class="active">Guide</a></li>
+      <li><a href="servizi.html">Servizi</a></li>
+      <li><a href="index.html#contatti" class="nav-cta">Consulenza gratuita</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="main-content">
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <div class="page-badge">📚 Guide gratuite</div>
+        <h1 class="page-title">Tutto quello che devi<br>sapere, in PDF</h1>
+        <p class="page-sub">Guide pratiche scritte dai nostri tributaristi su costituzione d'impresa, startup innovativa, finanziamenti e agevolazioni fiscali. Gratuite, sempre aggiornate.</p>
+      </div>
+    </div>
+
+    <hr class="gradient-hr">
+
+    <!-- GUIDE -->
+    <section>
+      <div class="s-inner">
+        <p class="s-tag">Scarica gratuitamente</p>
+        <h2 class="s-title">Le nostre guide pratiche</h2>
+        <p class="s-sub">Documenti PDF completi, redatti dai nostri esperti e aggiornati al 2026.</p>
+
+        <div class="guide-grid">
+
+          <div class="guide-card">
+            <div class="guide-icon">📘</div>
+            <span class="guide-tag">Finanziamenti</span>
+            <h3 class="guide-title">Guida completa al Crowdfunding</h3>
+            <p class="guide-desc">Tutto quello che devi sapere su Donation, Reward, Equity e Lending crowdfunding. Piattaforme italiane e internazionali, requisiti legali, strategie di lancio e case study.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Equity crowdfunding</span>
+              <span class="guide-topic">Lending</span>
+              <span class="guide-topic">Requisiti legge</span>
+              <span class="guide-topic">Piattaforme</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+          <div class="guide-card">
+            <div class="guide-icon">📗</div>
+            <span class="guide-tag">Forma societaria</span>
+            <h3 class="guide-title">Startup Innovativa: guida completa</h3>
+            <p class="guide-desc">Requisiti, vantaggi fiscali e procedure di iscrizione per diventare startup innovativa ai sensi del D.L. 179/2012. Agevolazioni contributive, tax relief per investitori e molto altro.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Requisiti D.L. 179/2012</span>
+              <span class="guide-topic">Tax relief</span>
+              <span class="guide-topic">MISE registrazione</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+          <div class="guide-card">
+            <div class="guide-icon">📙</div>
+            <span class="guide-tag">Agevolazioni</span>
+            <h3 class="guide-title">Bandi e finanziamenti 2026</h3>
+            <p class="guide-desc">Elenco aggiornato di bandi regionali (Lombardia), nazionali ed europei con scadenze, dotazioni finanziarie e requisiti di accesso per PMI e startup.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Bandi Lombardia</span>
+              <span class="guide-topic">PNRR</span>
+              <span class="guide-topic">Horizon Europe</span>
+              <span class="guide-topic">Sabatini</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+          <div class="guide-card">
+            <div class="guide-icon">📕</div>
+            <span class="guide-tag">Regime fiscale</span>
+            <h3 class="guide-title">Regime forfettario 2026: tutto chiaro</h3>
+            <p class="guide-desc">Requisiti di accesso, limiti di fatturato, coefficienti di redditività per settore, calcolo dell'imposta sostitutiva e gestione dei contributi INPS per chi sceglie il forfettario.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Limiti fatturato</span>
+              <span class="guide-topic">Imposta 5% / 15%</span>
+              <span class="guide-topic">INPS gestione sep.</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+          <div class="guide-card">
+            <div class="guide-icon">📓</div>
+            <span class="guide-tag">Costituzione</span>
+            <h3 class="guide-title">Come aprire una SRL: guida passo passo</h3>
+            <p class="guide-desc">Dalla bozza dello statuto al deposito al Registro Imprese. Costi notarili, tempistiche, capitale minimo, adempimenti fiscali iniziali e apertura partita IVA.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Atto costitutivo</span>
+              <span class="guide-topic">Registro imprese</span>
+              <span class="guide-topic">Partita IVA</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+          <div class="guide-card">
+            <div class="guide-icon">📔</div>
+            <span class="guide-tag">Fiscalità</span>
+            <h3 class="guide-title">Deduzioni e detrazioni per PMI</h3>
+            <p class="guide-desc">Tutte le deduzioni IRES e IRAP disponibili per le PMI nel 2026: ricerca e sviluppo, formazione del personale, beni strumentali 4.0, welfare aziendale e molto altro.</p>
+            <div class="guide-topics">
+              <span class="guide-topic">Credito R&S</span>
+              <span class="guide-topic">Industria 4.0</span>
+              <span class="guide-topic">Welfare</span>
+            </div>
+            <a href="#" class="guide-download soon" onclick="alert('PDF in preparazione. Registrati per essere avvisato!'); return false;">
+              ⬇ Scarica PDF <span class="soon-badge">In arrivo</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <hr class="gradient-hr">
+
+    <!-- NEWSLETTER -->
+    <section style="padding: 96px 48px; position:relative; z-index:1;">
+      <div class="newsletter-box">
+        <div style="font-size:48px; margin-bottom:16px;">📬</div>
+        <h2 class="newsletter-title">Avvisami quando<br>escono le guide</h2>
+        <p class="newsletter-sub">Lascia la tua email e ti avvisiamo non appena pubblichiamo una nuova guida. Niente spam, solo contenuti utili.</p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+          <input type="email" class="newsletter-input" placeholder="La tua email" required>
+          <button type="submit" class="btn-primary">Iscriviti →</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-col">
+        <a href="index.html" class="logo-inline" style="text-decoration:none; margin-bottom:4px;">
+          <div class="logo-letters" style="font-size:22px;"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+          <div class="logo-sep" style="height:22px;"></div>
+          <span class="logo-name" style="font-size:12px; color:var(--muted);">Giussani Data Solutions</span>
+        </a>
+        <span>GIUSSANI DATA SOLUTIONS SRL</span>
+        <span>Società di consulenza contabile tributaria</span>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Sede legale</span>
+        <span>P.zza Antoniotto Adorno Botta, 1</span>
+        <span>27100 Pavia (PV)</span>
+        <span style="margin-top:8px;">C.F. e P.IVA 02951580188</span>
+        <span>Codice SDI: KRRH6B9</span>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Contatti</span>
+        <a href="tel:0382426597">0382-426597</a>
+        <a href="mailto:info@gdstributaristi.it">info@gdstributaristi.it</a>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Navigazione</span>
+        <a href="percorsi.html">Percorsi</a>
+        <a href="strumenti.html">Strumenti</a>
+        <a href="guide.html">Guide</a>
+        <a href="servizi.html">Servizi</a>
+      </div>
+    </footer>
+    <div class="footer-bottom">
+      <span>© 2026 GIUSSANI DATA SOLUTIONS SRL · P.IVA 02951580188</span>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Cookie</a></span>
+    </div>
+
+  </div>
+
+  <script>
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+  function subscribeNewsletter(e) {
+    e.preventDefault();
+    const email = e.target.querySelector('input').value;
+    window.location.href = `mailto:info@gdstributaristi.it?subject=Iscrizione newsletter guide&body=Vorrei essere avvisato quando escono nuove guide. Email: ${email}`;
+  }
+  </script>
+</body>
+</html>
