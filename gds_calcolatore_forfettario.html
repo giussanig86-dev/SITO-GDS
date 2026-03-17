@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDS — Calcolatore Inverso Forfettari</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0c;--surface:#131316;--surface2:#1a1a1f;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.12);
+  --text:#e8e8ed;--muted:#6e6e7a;--muted2:#9898a6;
+  --blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;
+  --green-dim:rgba(52,168,83,.15);--blue-dim:rgba(66,133,244,.12);
+  --red-dim:rgba(234,67,53,.10);--yellow-dim:rgba(251,188,5,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;line-height:1.6;min-height:100vh}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,12,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:22px;font-weight:800;letter-spacing:-.04em}
+.logo .g{color:var(--blue)}.logo .d{color:var(--red)}.logo .s{color:var(--green)}
+.logo-tagline{font-size:11px;font-weight:400;color:var(--muted);letter-spacing:.04em;border-left:1px solid var(--border2);padding-left:12px;margin-left:4px}
+.nav-badge{font-size:11px;font-weight:600;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(251,188,5,.3);padding:4px 10px;border-radius:20px}
+
+/* HERO */
+.hero{padding:72px 32px 48px;max-width:960px;margin:0 auto;text-align:center}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-dim);border:1px solid rgba(66,133,244,.25);padding:5px 14px;border-radius:20px;margin-bottom:24px;letter-spacing:.06em;text-transform:uppercase}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
+.hero h1 .ac{color:var(--blue)}.hero h1 .an{color:var(--green)}
+.hero p{font-size:15px;color:var(--muted2);max-width:560px;margin:0 auto}
+
+/* MAIN CARD */
+.main{max-width:960px;margin:40px auto 80px;padding:0 32px}
+.card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;overflow:hidden;animation:su .35s ease}
+@keyframes su{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION INSIDE CARD */
+.csec{padding:24px 32px;border-bottom:1px solid var(--border)}
+.csec:last-of-type{border-bottom:none}
+.sec-title{font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px}
+
+/* FIELD ROWS */
+.field-row{display:flex;align-items:center;gap:12px;margin-bottom:13px;flex-wrap:wrap}
+.field-row:last-child{margin-bottom:0}
+.field-label{font-size:13px;color:var(--text);min-width:200px;flex:1}
+.field-label small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+
+.cinput{background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;padding:9px 14px;width:220px;outline:none;transition:border-color .2s}
+.cinput:focus{border-color:var(--blue)}
+select.cinput{width:240px;cursor:pointer}
+.cinput-pct{width:100px}
+
+.pct-wrap{display:flex;align-items:stretch;width:140px}
+.pct-wrap .cinput{border-radius:8px 0 0 8px;border-right:none;width:100%;padding-right:8px}
+.pct-suffix{background:var(--surface2);border:1.5px solid var(--border2);border-left:none;border-radius:0 8px 8px 0;padding:9px 12px;font-size:14px;font-weight:600;color:var(--muted);display:flex;align-items:center}
+
+/* CASSA BLOCK */
+.cassa-block{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:6px;margin-bottom:4px}
+.cassa-block .field-row{margin-bottom:11px}
+.cassa-block .field-row:last-child{margin-bottom:0}
+.cassa-block select.cinput{width:100%}
+.pct-edit-row{display:flex;align-items:center;gap:12px;margin-top:4px}
+.pct-edit-row .field-label{font-size:12px;color:var(--muted2)}
+.pct-edit-row .pct-wrap{width:130px}
+.pct-edit-row .pct-wrap .cinput{font-size:13px}
+.tag-edit{font-size:10px;font-weight:600;color:var(--blue);background:var(--blue-dim);padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+
+/* CHECKBOX */
+.check-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.check-row input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:var(--blue);flex-shrink:0}
+.check-row label{font-size:13px;color:var(--muted2);cursor:pointer;line-height:1.4}
+.check-row.disabled{opacity:.35;pointer-events:none}
+
+/* NETTO INPUT */
+.netto-hero{padding:26px 32px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(66,133,244,.06) 0%,rgba(52,168,83,.04) 100%)}
+.netto-hero-label{font-size:13px;color:var(--muted2);margin-bottom:10px}
+.netto-input-wrap{display:flex;align-items:stretch;gap:0;max-width:340px}
+.netto-input-wrap input{background:var(--surface2);border:2px solid var(--blue);border-right:none;border-radius:12px 0 0 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;padding:14px 18px;width:100%;outline:none;letter-spacing:-.02em;transition:border-color .2s}
+.netto-input-wrap input:focus{border-color:var(--green)}
+.netto-input-wrap .eur{background:var(--blue);border-radius:0 12px 12px 0;padding:0 20px;font-size:20px;font-weight:700;color:#fff;display:flex;align-items:center;transition:background .2s}
+.netto-input-wrap input:focus + .eur{background:var(--green)}
+
+/* RESULTS */
+.results-sec{padding:26px 32px;border-bottom:1px solid var(--border)}
+
+.lordo-box{background:var(--blue-dim);border:1.5px solid rgba(66,133,244,.3);border-radius:14px;padding:20px 24px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lordo-box .lb-label{font-size:12px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.lordo-box .lb-value{font-size:40px;font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1}
+.lordo-box .lb-sub{font-size:12px;color:var(--muted2);margin-top:5px}
+.lordo-box .lb-rivalsa{background:var(--green-dim);border:1px solid rgba(52,168,83,.3);border-radius:10px;padding:10px 16px;text-align:center;flex-shrink:0}
+.lordo-box .lb-rivalsa .rv-label{font-size:10px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.lordo-box .lb-rivalsa .rv-value{font-size:20px;font-weight:800;color:var(--green)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.kpi{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.kpi .kl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.kpi .kv{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.kpi .ks{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* BREAKDOWN TABLE */
+.breakdown{width:100%;border-collapse:collapse;font-size:13px}
+.breakdown td{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.breakdown tr:last-child td{border-bottom:none;font-weight:700;font-size:14px}
+.breakdown td:last-child{text-align:right;font-weight:600;font-family:'Courier New',monospace;font-size:13px}
+.breakdown .row-neg td:first-child{color:var(--red)}
+.breakdown .row-neg td:last-child{color:var(--red)}
+.breakdown .row-pos td:first-child{color:var(--green)}
+.breakdown .row-pos td:last-child{color:var(--green)}
+.breakdown .row-dim td{color:var(--muted2)}
+.breakdown .row-dim td:last-child{color:var(--muted2)}
+
+/* FBOX */
+.fbox{background:var(--yellow-dim);border:1px solid rgba(251,188,5,.25);border-radius:14px;padding:16px 20px;display:flex;gap:12px;font-size:13px;color:var(--muted2);line-height:1.65}
+.fbox strong{color:var(--text)}
+
+/* CTA */
+.rcta{padding:20px 32px;border-top:1px solid var(--border);background:linear-gradient(135deg,rgba(66,133,244,.06) 0%,rgba(52,168,83,.04) 100%);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.rcta p{font-size:13px;color:var(--muted2)}
+.rcta p strong{color:var(--text)}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:11px 22px;border-radius:10px;border:none;cursor:pointer;transition:background .2s,transform .15s;white-space:nowrap}
+.cta-btn:hover{background:#2d9647;transform:translateY(-1px)}
+
+/* INFO PILLS */
+.ipr{max-width:960px;margin:0 auto 72px;padding:0 32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.ip{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 18px}
+.ip-i{font-size:24px;margin-bottom:8px}
+.ip-t{font-size:13px;font-weight:700;margin-bottom:5px}
+.ip-x{font-size:12px;color:var(--muted2);line-height:1.6}
+
+footer{border-top:1px solid var(--border);padding:28px 32px;text-align:center;font-size:12px;color:var(--muted);max-width:960px;margin:0 auto}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+
+@media(max-width:700px){
+  nav{padding:0 16px}.logo-tagline{display:none}
+  .hero,.main,.ipr{padding-left:16px;padding-right:16px}
+  .hero{padding-top:48px;padding-bottom:28px}
+  .csec,.netto-hero,.results-sec,.rcta{padding-left:18px;padding-right:18px}
+  .field-row{flex-direction:column;align-items:flex-start}
+  .cinput,select.cinput{width:100%}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .lordo-box{flex-direction:column;align-items:flex-start}
+  .ipr{grid-template-columns:1fr}
+  .rcta{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <span class="g">G</span><span class="d">D</span><span class="s">S</span>
+    <span class="logo-tagline">tributaristi certificati</span>
+  </a>
+  <span class="nav-badge">🧮 Calcolatore Forfettari</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-chip">⚡ Regime Forfettario 2025</div>
+  <h1>Calcolatore <span class="ac">Inverso</span><br>per <span class="an">Forfettari</span></h1>
+  <p>Inserisci il netto che vuoi ricevere in tasca: calcoliamo il lordo da indicare in fattura tenendo conto di imposta sostitutiva e contributi previdenziali.</p>
+</div>
+
+<div class="main">
+  <div class="card">
+
+    <!-- PARAMETRI FISCALI -->
+    <div class="csec">
+      <div class="sec-title">⚙️ Parametri fiscali</div>
+
+      <div class="field-row">
+        <div class="field-label">Coefficiente di redditività<small>In base alla categoria ATECO</small></div>
+        <select class="cinput" id="coeff" onchange="calc()">
+          <option value="0.40">40% — Commercio</option>
+          <option value="0.54">54% — Commercio ambulante</option>
+          <option value="0.67" selected>67% — Professionisti</option>
+          <option value="0.78">78% — Artigiani / Servizi</option>
+          <option value="0.86">86% — Professioni tecniche</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Aliquota imposta sostitutiva<small>Imposta sul reddito forfettario</small></div>
+        <select class="cinput" id="timposta" onchange="calc()">
+          <option value="0.05" selected>5% — Regime agevolato (primi 5 anni)</option>
+          <option value="0.15">15% — Regime ordinario</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PREVIDENZA -->
+    <div class="csec">
+      <div class="sec-title">🏛️ Previdenza</div>
+
+      <div class="field-row">
+        <div class="field-label">Tipo di cassa previdenziale</div>
+        <select class="cinput" id="tipo-cassa" onchange="onCassaChange()">
+          <option value="separata">INPS — Gestione separata</option>
+          <option value="artigiani">INPS — Artigiani e commercianti</option>
+          <option value="cassa">Cassa di previdenza</option>
+        </select>
+      </div>
+
+      <!-- Blocco cassa previdenza -->
+      <div class="cassa-block" id="block-cassa" style="display:none">
+        <div class="field-row">
+          <div class="field-label" style="min-width:auto;font-size:13px">Seleziona la cassa</div>
+          <select class="cinput" id="cassa-lista" onchange="onListaChange()" style="width:100%">
+            <option value="12">ENPAM — Medici e odontoiatri (12%)</option>
+            <option value="14.5">INARCASSA — Ingegneri e architetti (14.5%)</option>
+            <option value="11.5">CNPADC — Dottori commercialisti (11.5%)</option>
+            <option value="12.5">CASSA FORENSE — Avvocati (12.5%)</option>
+            <option value="10">ENPAF — Farmacisti (10%)</option>
+            <option value="12">CIPAG — Geometri (12%)</option>
+            <option value="11.5">CNPR — Ragionieri (11.5%)</option>
+            <option value="10">EPPI — Periti industriali (10%)</option>
+            <option value="12">ENPAV — Veterinari (12%)</option>
+            <option value="custom">Altra / personalizzata…</option>
+          </select>
+        </div>
+        <div class="pct-edit-row">
+          <div class="field-label" style="min-width:auto;font-size:12px;color:var(--muted2)">
+            Aliquota effettiva <span class="tag-edit">modificabile</span>
+          </div>
+          <div class="pct-wrap">
+            <input type="number" class="cinput" id="cassa-pct" value="12" min="0" max="50" step="0.5" oninput="onPctEdit()">
+            <span class="pct-suffix">%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Riduzione 35% solo per artigiani -->
+      <div class="check-row disabled" id="row-rid35">
+        <input type="checkbox" id="rid35" onchange="calc()">
+        <label for="rid35">Applica riduzione contributiva 35% — solo INPS artigiani/commercianti (richiesta annuale)</label>
+      </div>
+
+      <!-- Rivalsa 4% -->
+      <div class="check-row">
+        <input type="checkbox" id="rivalsa" onchange="calc()">
+        <label for="rivalsa">Applica rivalsa 4% addebitata al cliente in fattura (la aggiunge al totale fattura)</label>
+      </div>
+    </div>
+
+    <!-- NETTO DESIDERATO -->
+    <div class="netto-hero">
+      <div class="netto-hero-label">💶 Quanto vuoi ricevere in tasca (netto)?</div>
+      <div class="netto-input-wrap">
+        <input type="number" id="netto" value="2000" min="0" step="100" oninput="calc()" placeholder="0">
+        <span class="eur">€</span>
+      </div>
+    </div>
+
+    <!-- RISULTATI -->
+    <div class="results-sec" id="results-sec">
+
+      <div class="lordo-box">
+        <div>
+          <div class="lb-label">Lordo da fatturare</div>
+          <div class="lb-value" id="res-lordo">—</div>
+          <div class="lb-sub" id="res-sub">—</div>
+        </div>
+        <div class="lb-rivalsa" id="box-rivalsa" style="display:none">
+          <div class="rv-label">di cui rivalsa 4%</div>
+          <div class="rv-value" id="res-rivalsa-val">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kl">Imposta sostitutiva</div>
+          <div class="kv" id="kpi-imposta">—</div>
+          <div class="ks" id="kpi-imposta-s">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kl">Contributi previdenziali</div>
+          <div class="kv" id="kpi-inps">—</div>
+          <div class="ks" id="kpi-inps-s">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kl">Aliquota eff. sul lordo</div>
+          <div class="kv" id="kpi-aliq">—</div>
+          <div class="ks">imposta + contributi</div>
+        </div>
+      </div>
+
+      <table class="breakdown">
+        <tr class="row-dim"><td>Lordo base fattura</td><td id="tb-lordo">—</td></tr>
+        <tr class="row-dim" id="tr-rivalsa" style="display:none"><td>+ Rivalsa 4% addebitata al cliente</td><td id="tb-rivalsa" style="color:var(--green)">—</td></tr>
+        <tr><td>= Totale incassato</td><td id="tb-tot">—</td></tr>
+        <tr class="row-dim"><td>Imponibile forfettario (<span id="tb-coeff">67</span>% del lordo base)</td><td id="tb-imponibile">—</td></tr>
+        <tr class="row-neg"><td>− Imposta sostitutiva (<span id="tb-timp">5</span>% sull'imponibile)</td><td id="tb-imp-val">—</td></tr>
+        <tr class="row-neg"><td>− Contributi previdenziali (<span id="tb-tinps">25,72</span>% sull'imponibile)</td><td id="tb-inps-val">—</td></tr>
+        <tr class="row-pos"><td>= Netto in tasca</td><td id="tb-netto">—</td></tr>
+      </table>
+    </div>
+
+    <!-- NOTA -->
+    <div class="csec" style="padding-top:20px;padding-bottom:20px">
+      <div class="fbox">
+        <div style="font-size:20px;flex-shrink:0;margin-top:2px">💡</div>
+        <div>
+          <strong>Come funziona il calcolo inverso:</strong> il netto in tasca equivale al lordo meno imposta sostitutiva e contributi, entrambi calcolati sull'<strong>imponibile forfettario</strong> (lordo × coefficiente). La formula è:
+          <strong>Lordo = Netto ÷ [1 − Coeff × (Aliq. imp. + Aliq. prev.)]</strong>.
+          Se attivi la rivalsa 4%, viene aggiunta in cima alla fattura e riduce il tuo costo contributivo netto.
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="rcta">
+      <p>Hai dubbi sul tuo coefficiente ATECO o vuoi <strong>ottimizzare la tua posizione fiscale</strong>?</p>
+      <a href="mailto:info@gdstributaristi.it" class="cta-btn">✉️ Consulenza gratuita GDS</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="ipr">
+  <div class="ip">
+    <div class="ip-i">🔄</div>
+    <div class="ip-t">Cos'è il calcolo inverso?</div>
+    <div class="ip-x">Partendo dal netto desiderato, questo strumento calcola il lordo da inserire in fattura, tenendo conto di imposta sostitutiva e contributi previdenziali che il forfettario deve versare.</div>
+  </div>
+  <div class="ip">
+    <div class="ip-i">🏛️</div>
+    <div class="ip-t">Rivalsa INPS 4%</div>
+    <div class="ip-x">Il forfettario può addebitare al cliente una rivalsa del 4% a titolo di contributo previdenziale. Questa somma viene incassata e poi versata alla propria cassa, riducendo l'esborso netto.</div>
+  </div>
+  <div class="ip">
+    <div class="ip-i">⚠️</div>
+    <div class="ip-t">Nota sul calcolo</div>
+    <div class="ip-x">Il calcolatore fornisce una stima indicativa. Le aliquote delle casse privatizzate variano per reddito e anzianità. Consulta sempre un professionista per la tua situazione specifica.</div>
+  </div>
+</div>
+
+<footer>
+  Regime forfettario — L. 190/2014 (mod. L. 145/2018) · Contributi INPS: Circolare INPS 2025 · Casse privatizzate: aliquote orientative 2025<br>
+  <strong>GDS Tributaristi Certificati</strong> — Dati a scopo orientativo. Per la tua situazione specifica consulta sempre un professionista.
+</footer>
+
+<script>
+let userEditedPct = false;
+
+const fmt = v => v.toLocaleString('it-IT', {style:'currency', currency:'EUR', maximumFractionDigits:2});
+const fmtPct = v => v.toLocaleString('it-IT', {minimumFractionDigits:1, maximumFractionDigits:2}) + '%';
+
+function getINPSpct() {
+  const tipo = document.getElementById('tipo-cassa').value;
+  const rid = document.getElementById('rid35').checked;
+  if (tipo === 'separata') return 0.2572;
+  if (tipo === 'artigiani') {
+    const base = 0.2442;
+    return rid ? base * 0.65 : base;
+  }
+  if (tipo === 'cassa') {
+    return (parseFloat(document.getElementById('cassa-pct').value) || 0) / 100;
+  }
+  return 0;
+}
+
+function getINPSlabel() {
+  const tipo = document.getElementById('tipo-cassa').value;
+  const rid = document.getElementById('rid35').checked;
+  if (tipo === 'separata') return 'Gestione separata';
+  if (tipo === 'artigiani') return rid ? 'Artigiani (−35%)' : 'Artigiani';
+  if (tipo === 'cassa') {
+    const sel = document.getElementById('cassa-lista');
+    const opt = sel.options[sel.selectedIndex];
+    return opt.value === 'custom' ? 'Cassa personalizz.' : opt.text.split('—')[0].trim();
+  }
+  return '';
+}
+
+function onCassaChange() {
+  const tipo = document.getElementById('tipo-cassa').value;
+  document.getElementById('block-cassa').style.display = tipo === 'cassa' ? 'block' : 'none';
+  const rowRid = document.getElementById('row-rid35');
+  if (tipo === 'artigiani') {
+    rowRid.classList.remove('disabled');
+  } else {
+    rowRid.classList.add('disabled');
+    document.getElementById('rid35').checked = false;
+  }
+  userEditedPct = false;
+  calc();
+}
+
+function onListaChange() {
+  const sel = document.getElementById('cassa-lista');
+  userEditedPct = false;
+  if (sel.value !== 'custom') {
+    document.getElementById('cassa-pct').value = sel.value;
+  }
+  calc();
+}
+
+function onPctEdit() {
+  userEditedPct = true;
+  const sel = document.getElementById('cassa-lista');
+  const curPct = parseFloat(document.getElementById('cassa-pct').value);
+  const selPct = parseFloat(sel.value);
+  if (!isNaN(curPct) && curPct !== selPct) sel.value = 'custom';
+  calc();
+}
+
+function calc() {
+  const netto = parseFloat(document.getElementById('netto').value) || 0;
+  const coeff = parseFloat(document.getElementById('coeff').value);
+  const timposta = parseFloat(document.getElementById('timposta').value);
+  const tinps = getINPSpct();
+  const rivalsa = document.getElementById('rivalsa').checked;
+
+  // Calcolo inverso
+  // netto = lordo*(1 - coeff*(timposta+tinps)) + (rivalsa ? lordo*0.04 : 0)
+  const factor = 1 - coeff * (timposta + tinps) + (rivalsa ? 0.04 : 0);
+  const lordo = factor > 0 ? netto / factor : 0;
+  const rivalsaVal = rivalsa ? lordo * 0.04 : 0;
+  const totIncassato = lordo + rivalsaVal;
+  const imponibile = lordo * coeff;
+  const imposta = imponibile * timposta;
+  const inps = imponibile * tinps;
+  const nettoCalc = totIncassato - imposta - inps;
+  const aliqEff = lordo > 0 ? ((imposta + inps) / lordo) * 100 : 0;
+
+  const coeffPct = (coeff * 100).toFixed(0);
+  const timpPct = (timposta * 100).toFixed(0);
+  const tinpsPct = (tinps * 100).toFixed(2).replace(/\.?0+$/, '').replace('.', ',');
+
+  // Lordo box
+  document.getElementById('res-lordo').textContent = fmt(totIncassato);
+  document.getElementById('res-sub').textContent =
+    'imponibile ' + fmt(imponibile) + ' · coeff. ' + coeffPct + '%';
+
+  // Rivalsa box
+  const boxRivalsa = document.getElementById('box-rivalsa');
+  if (rivalsa) {
+    boxRivalsa.style.display = 'block';
+    document.getElementById('res-rivalsa-val').textContent = fmt(rivalsaVal);
+  } else {
+    boxRivalsa.style.display = 'none';
+  }
+
+  // KPI
+  document.getElementById('kpi-imposta').textContent = fmt(imposta);
+  document.getElementById('kpi-imposta-s').textContent = timpPct + '% su imponibile';
+  document.getElementById('kpi-inps').textContent = fmt(inps);
+  document.getElementById('kpi-inps-s').textContent = tinpsPct + '% · ' + getINPSlabel();
+  document.getElementById('kpi-aliq').textContent = fmtPct(aliqEff);
+
+  // Breakdown
+  document.getElementById('tb-lordo').textContent = fmt(lordo);
+  document.getElementById('tb-rivalsa').textContent = '+ ' + fmt(rivalsaVal);
+  document.getElementById('tr-rivalsa').style.display = rivalsa ? '' : 'none';
+  document.getElementById('tb-tot').textContent = fmt(totIncassato);
+  document.getElementById('tb-coeff').textContent = coeffPct;
+  document.getElementById('tb-imponibile').textContent = fmt(imponibile);
+  document.getElementById('tb-timp').textContent = timpPct;
+  document.getElementById('tb-imp-val').textContent = '− ' + fmt(imposta);
+  document.getElementById('tb-tinps').textContent = tinpsPct;
+  document.getElementById('tb-inps-val').textContent = '− ' + fmt(inps);
+  document.getElementById('tb-netto').textContent = fmt(nettoCalc);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  calc();
+});
+</script>
+</body>
+</html>

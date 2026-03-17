@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDS — Giussani Data Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0f;
+  --surface: #131316;
+  --surface2: #1a1a1e;
+  --border: rgba(255,255,255,0.06);
+  --text: #e8e8ed;
+  --muted: #6e6e7a;
+  --blue: #4285F4;
+  --red: #EA4335;
+  --yellow: #FBBC05;
+  --green: #34A853;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── B&W SVG city skyline background ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-color: #0a0a0c;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Crect width='1440' height='900' fill='%230a0a0c'/%3E%3Ccircle cx='80' cy='60' r='1' fill='%23ffffff' opacity='0.4'/%3E%3Ccircle cx='200' cy='30' r='1.5' fill='%23ffffff' opacity='0.3'/%3E%3Ccircle cx='340' cy='80' r='1' fill='%23ffffff' opacity='0.5'/%3E%3Ccircle cx='500' cy='20' r='1' fill='%23ffffff' opacity='0.3'/%3E%3Ccircle cx='650' cy='55' r='1.5' fill='%23ffffff' opacity='0.4'/%3E%3Ccircle cx='800' cy='15' r='1' fill='%23ffffff' opacity='0.5'/%3E%3Ccircle cx='950' cy='70' r='1' fill='%23ffffff' opacity='0.3'/%3E%3Ccircle cx='1100' cy='35' r='1.5' fill='%23ffffff' opacity='0.4'/%3E%3Ccircle cx='1250' cy='25' r='1' fill='%23ffffff' opacity='0.5'/%3E%3Ccircle cx='1380' cy='60' r='1' fill='%23ffffff' opacity='0.3'/%3E%3Crect x='0' y='620' width='60' height='280' fill='%23161618'/%3E%3Crect x='55' y='580' width='45' height='320' fill='%23141416'/%3E%3Crect x='95' y='640' width='70' height='260' fill='%23161618'/%3E%3Crect x='160' y='560' width='50' height='340' fill='%23141416'/%3E%3Crect x='280' y='530' width='40' height='370' fill='%23121214'/%3E%3Crect x='510' y='520' width='50' height='380' fill='%23121214'/%3E%3Crect x='620' y='480' width='45' height='420' fill='%23101012'/%3E%3Crect x='835' y='500' width='70' height='400' fill='%23101012'/%3E%3Crect x='950' y='490' width='80' height='410' fill='%23121214'/%3E%3Crect x='1125' y='470' width='55' height='430' fill='%23101012'/%3E%3Crect x='0' y='700' width='110' height='200' fill='%230e0e10'/%3E%3Crect x='100' y='660' width='80' height='240' fill='%230c0c0e'/%3E%3Crect x='290' y='650' width='90' height='250' fill='%230a0a0c'/%3E%3Crect x='480' y='640' width='100' height='260' fill='%230c0c0e'/%3E%3Crect x='700' y='630' width='90' height='270' fill='%230a0a0c'/%3E%3Crect x='890' y='650' width='100' height='250' fill='%230c0c0e'/%3E%3Crect x='1100' y='640' width='90' height='260' fill='%230a0a0c'/%3E%3Crect x='1290' y='660' width='80' height='240' fill='%230e0e10'/%3E%3Crect x='22' y='640' width='4' height='3' fill='%23ffffff' opacity='0.15'/%3E%3Crect x='320' y='550' width='4' height='3' fill='%23ffffff' opacity='0.15'/%3E%3Crect x='640' y='500' width='4' height='3' fill='%23ffffff' opacity='0.15'/%3E%3Crect x='960' y='510' width='4' height='3' fill='%23ffffff' opacity='0.15'/%3E%3Crect x='0' y='880' width='1440' height='20' fill='%23080808'/%3E%3Cellipse cx='720' cy='860' rx='600' ry='60' fill='%23181818' opacity='0.8'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,12,0.82) 0%, rgba(10,10,12,0.65) 40%, rgba(10,10,12,0.75) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Mesh gradient canvas */
+#mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hidden { display: none !important; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 48px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(13,13,15,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.logo-inline { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
+.logo-letters {
+  font-family: 'Poppins', sans-serif; font-weight: 800;
+  font-size: 28px; letter-spacing: -0.04em; line-height: 1; display: flex;
+}
+.l-g { color: #4285F4; } .l-d { color: #EA4335; } .l-s { color: #34A853; }
+.logo-sep {
+  width: 1.5px; height: 28px;
+  background: linear-gradient(180deg, #4285F4 0%, #EA4335 33%, #FBBC05 66%, #34A853 100%);
+  border-radius: 2px; flex-shrink: 0;
+}
+.logo-name {
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
+  color: #e8e8ed; letter-spacing: -0.01em; line-height: 1;
+}
+.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 400; color: var(--muted);
+  text-decoration: none; transition: color 0.2s; letter-spacing: 0.02em;
+  cursor: pointer;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--blue); color: #fff !important; padding: 9px 20px;
+  border-radius: 8px; font-weight: 500 !important; font-size: 13px !important;
+  transition: opacity 0.2s !important;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+.nav-back {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+.nav-back:hover { border-color: rgba(255,255,255,0.2); }
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 140px 48px 100px; overflow: hidden;
+}
+.hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.orb1 { top: -200px; left: -200px; width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(66,133,244,0.09) 0%, transparent 70%); }
+.orb2 { bottom: -100px; right: -100px; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(52,168,83,0.07) 0%, transparent 70%); }
+.orb3 { top: 40%; left: 50%; width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(234,67,53,0.05) 0%, transparent 70%); }
+.hero-content { position: relative; z-index: 1; max-width: 740px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(66,133,244,0.08); border: 1px solid rgba(66,133,244,0.2);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.badge-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: pulse 2s infinite; }
+.hero-badge span { font-size: 12px; color: #7ab3f8; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+.hero-title {
+  font-size: clamp(40px, 6vw, 72px); font-weight: 800;
+  line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.acc-b { color: var(--blue); } .acc-r { color: var(--red); }
+.acc-g { color: var(--green); } .acc-y { color: var(--yellow); }
+.hero-sub {
+  font-size: 17px; font-weight: 300; color: var(--muted);
+  max-width: 520px; line-height: 1.75; margin-bottom: 48px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+.btn-primary {
+  background: var(--blue); color: #fff; padding: 14px 30px;
+  border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(66,133,244,0.35); }
+.btn-ghost {
+  background: transparent; color: var(--text); padding: 14px 30px;
+  border-radius: 10px; font-size: 14px; font-weight: 500; text-decoration: none;
+  border: 1px solid var(--border); transition: border-color 0.2s, background 0.2s;
+  cursor: pointer; font-family: 'Poppins', sans-serif;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); }
+.hero-stats {
+  display: flex; gap: 48px; margin-top: 72px; padding-top: 40px;
+  border-top: 1px solid var(--border); flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-num { font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.stat-label { font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; }
+.gradient-hr {
+  height: 1px; border: none; position: relative; z-index: 1;
+  background: linear-gradient(90deg, transparent, rgba(66,133,244,0.3), rgba(234,67,53,0.25), rgba(251,188,5,0.25), rgba(52,168,83,0.25), transparent);
+}
+
+/* ── SECTIONS ── */
+section { position: relative; z-index: 1; padding: 96px 48px; }
+.s-inner { max-width: 1100px; margin: 0 auto; }
+.s-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+.s-title { font-size: clamp(26px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 14px; }
+.s-sub { font-size: 15px; color: var(--muted); font-weight: 300; max-width: 520px; line-height: 1.75; margin-bottom: 52px; }
+
+/* Path cards (interactive flows) */
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.path-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+.path-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+}
+
+.path-icon {
+  font-size: 48px;
+  line-height: 1;
+  filter: grayscale(0.2);
+}
+
+.path-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.path-desc {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.path-arrow {
+  color: var(--blue);
+  font-size: 20px;
+  margin-top: auto;
+}
+
+/* Rest of sections from original landing */
+/* Strumenti Section */
+.strumenti-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+.tool-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px 28px; display: flex; flex-direction: column; gap: 16px;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.tool-card:hover { 
+  transform: translateY(-4px); 
+  border-color: rgba(255,255,255,0.12); 
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+.tool-card:nth-child(1) { border-top: 3px solid var(--blue); }
+.tool-card:nth-child(2) { border-top: 3px solid var(--green); }
+.tool-card:nth-child(3) { border-top: 3px solid var(--yellow); }
+.tool-icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.tool-title { 
+  font-size: 18px; 
+  font-weight: 700; 
+  letter-spacing: -0.01em; 
+  color: var(--text);
+}
+.tool-desc { 
+  font-size: 13px; 
+  color: var(--muted); 
+  line-height: 1.7; 
+  font-weight: 300; 
+  flex: 1; 
+}
+.tool-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(66,133,244,0.08);
+  border: 1px solid rgba(66,133,244,0.2);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+  text-decoration: none;
+  transition: all 0.2s;
+  align-self: flex-start;
+}
+.tool-download:hover {
+  background: rgba(66,133,244,0.15);
+  border-color: rgba(66,133,244,0.4);
+  transform: translateX(2px);
+}
+.tool-download span {
+  font-size: 16px;
+}
+
+/* CTA */
+.cta-section { text-align: center; padding: 110px 48px; position: relative; overflow: hidden; }
+.cta-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(66,133,244,0.06) 0%, transparent 70%); pointer-events: none; }
+.cta-inner { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; }
+.cta-title { font-size: clamp(30px, 5vw, 52px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; }
+.cta-sub { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.75; margin-bottom: 32px; }
+.cta-chips { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+.contact-chip { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 8px 18px; font-size: 13px; color: var(--text); text-decoration: none; transition: border-color 0.2s; }
+.contact-chip:hover { border-color: rgba(255,255,255,0.15); }
+.cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding: 40px 48px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 28px; position: relative; z-index: 1; }
+.footer-col { display: flex; flex-direction: column; gap: 6px; }
+.footer-col-title { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.footer-col a, .footer-col span { font-size: 12px; color: var(--muted); text-decoration: none; font-weight: 300; line-height: 1.6; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom { border-top: 1px solid var(--border); padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: relative; z-index: 1; }
+.footer-bottom span, .footer-bottom a { font-size: 11px; color: #333; font-weight: 300; text-decoration: none; }
+
+/* ── INTERACTIVE FLOW OVERLAY ── */
+.flow-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10,10,12,0.95);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+  padding: 80px 32px 60px;
+  animation: fadeIn 0.3s ease;
+}
+
+.flow-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.progress-dot {
+  height: 4px;
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.progress-dot.active { background: var(--blue); }
+
+.section-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 56px 48px;
+  text-align: center;
+}
+
+.section-icon {
+  font-size: 72px;
+  margin-bottom: 28px;
+  filter: grayscale(0.2);
+}
+
+.section-title {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.section-text {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+.section-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.03);
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.quiz-option {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  color: var(--text);
+}
+.quiz-option:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateX(4px);
+}
+
+.quiz-option.selected {
+  background: rgba(66,133,244,0.12);
+  border-color: var(--blue);
+  color: var(--blue);
+  font-weight: 500;
+}
+
+.result-box {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 32px;
+  text-align: center;
+}
+
+.result-box.success { border-color: var(--green); background: rgba(52,168,83,0.05); }
+.result-box.warning { border-color: var(--yellow); background: rgba(251,188,5,0.05); }
+.result-box.error { border-color: var(--red); background: rgba(234,67,53,0.05); }
+
+.result-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.result-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.result-box.success .result-title { color: var(--green); }
+.result-box.warning .result-title { color: var(--yellow); }
+.result-box.error .result-title { color: var(--red); }
+
+.result-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  margin: 32px auto;
+  text-align: left;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.checklist-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.checklist-item.done .checklist-icon { color: var(--green); }
+.checklist-item.pending .checklist-icon { color: var(--yellow); }
+
+/* Animations */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Responsive */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; } .nav-links { display: none; }
+  .hero, section { padding-left: 20px; padding-right: 20px; }
+  .tools-grid, .path-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 80px 20px; }
+  footer { padding: 32px 20px; } .footer-bottom { padding: 16px 20px; }
+  .flow-overlay { padding: 80px 20px 40px; }
+  .section-content { padding: 40px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Mesh gradient canvas -->
+<canvas id="mesh-bg"></canvas>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a class="logo-inline" onclick="showMainContent()">
+    <div class="logo-letters"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+    <div class="logo-sep"></div>
+    <span class="logo-name">Giussani Data Solutions</span>
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="scrollToSection('percorsi')">Percorsi</a></li>
+    <li><a onclick="scrollToSection('strumenti')">Strumenti</a></li>
+    <li><a onclick="scrollToSection('contatti')">Contatti</a></li>
+    <li><a onclick="scrollToSection('contatti')" class="nav-cta">Prima consulenza gratuita</a></li>
+  </ul>
+  <button class="nav-back hidden" onclick="closeFlow()">← Indietro</button>
+</nav>
+
+<!-- ══ MAIN CONTENT (Landing Page) ══ -->
+<div id="main-content" class="main-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Dicci che imprenditore sei,<br>noi ti diremo come<br>
+        <span class="acc-b">costruire</span> <span class="acc-r">la tua</span> <span class="acc-g">impresa</span><span class="acc-y">.</span>
+      </h1>
+      <p class="hero-sub">GDS — Giussani Data Solutions è una società di consulenza contabile e tributaria. Affianchiamo professionisti e imprese in ogni fase del loro percorso, dalla costituzione alla crescita.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToSection('contatti')">Prima consulenza gratuita →</button>
+        <button class="btn-ghost" onclick="scrollToSection('percorsi')">Scopri i percorsi</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num acc-b">450+</span><span class="stat-label">Business plan validati</span></div>
+        <div class="stat"><span class="stat-num acc-r">1,2 mln</span><span class="stat-label">Movimenti contabili gestiti</span></div>
+        <div class="stat"><span class="stat-num acc-g">14</span><span class="stat-label">Professionisti e collaboratori</span></div>
+        <div class="stat"><span class="stat-num acc-y">1.5×</span><span class="stat-label">Aumento fatturato clienti</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="gradient-hr">
+
+  <!-- PERCORSI GUIDATI -->
+  <section id="percorsi">
+    <div class="s-inner">
+      <p class="s-tag">Trova il tuo percorso</p>
+      <h2 class="s-title">Scegli il percorso più adatto<br>alla tua situazione</h2>
+      <p class="s-sub">Ti guidiamo passo dopo passo: dalla validazione dell'idea alla verifica dei requisiti startup, fino alla scelta della struttura giuridica e al finanziamento.</p>
+      <div class="path-grid">
+        <div class="path-card" onclick="openFlow('idea')">
+          <div class="path-icon">💡</div>
+          <h3 class="path-title">Ho un'idea</h3>
+          <p class="path-desc">Non ho ancora un'impresa ma voglio capire come trasformare la mia idea in un business concreto.</p>
+          <div class="path-arrow">→</div>
+        </div>
+
+        <div class="path-card" onclick="openFlow('verify')">
+          <div class="path-icon">🏢</div>
+          <h3 class="path-title">Ho sentito parlare di Startup Innovativa</h3>
+          <p class="path-desc">Voglio verificare se ho i requisiti per diventare startup innovativa e accedere alle agevolazioni della legge 221/2012.</p>
+          <div class="path-arrow">→</div>
+        </div>
+
+        <div class="path-card" onclick="openFlow('structure')">
+          <div class="path-icon">⚖️</div>
+          <h3 class="path-title">Voglio scegliere la struttura giusta</h3>
+          <p class="path-desc">Devo capire quale forma societaria è più adatta al mio progetto: ditta individuale, SNC, SRL o SRLS.</p>
+          <div class="path-arrow">→</div>
+        </div>
+
+        <div class="path-card" onclick="openFlow('finance')">
+          <div class="path-icon">💰</div>
+          <h3 class="path-title">Voglio trovare finanziamenti per il mio progetto</h3>
+          <p class="path-desc">Voglio scoprire le opzioni di finanziamento disponibili: crowdfunding, bandi, agevolazioni fiscali e credito.</p>
+          <div class="path-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="gradient-hr">
+
+  <!-- STRUMENTI -->
+  <section id="strumenti" class="strumenti-section">
+    <div class="s-inner">
+      <p class="s-tag" style="color:var(--yellow);">Strumenti</p>
+      <h2 class="s-title">Guide e risorse<br>per la tua impresa</h2>
+      <p class="s-sub">Scarica gratuitamente le nostre guide complete su costituzione d'impresa, finanziamenti e agevolazioni fiscali.</p>
+      
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-icon">📘</div>
+          <h3 class="tool-title">Guida al Crowdfunding</h3>
+          <p class="tool-desc">Tutto quello che devi sapere su Donation, Reward, Equity e Lending crowdfunding. Piattaforme, requisiti e strategie.</p>
+          <a href="#" class="tool-download" onclick="alert('PDF in preparazione'); return false;">
+            <span>⬇</span> Scarica PDF
+          </a>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-icon">📗</div>
+          <h3 class="tool-title">Startup Innovativa</h3>
+          <p class="tool-desc">Guida completa ai requisiti, vantaggi fiscali e procedure di iscrizione per diventare startup innovativa.</p>
+          <a href="#" class="tool-download" onclick="alert('PDF in preparazione'); return false;">
+            <span>⬇</span> Scarica PDF
+          </a>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-icon">📙</div>
+          <h3 class="tool-title">Bandi e Finanziamenti 2026</h3>
+          <p class="tool-desc">Elenco aggiornato di bandi regionali, nazionali ed europei con scadenze e requisiti di accesso.</p>
+          <a href="#" class="tool-download" onclick="alert('PDF in preparazione'); return false;">
+            <span>⬇</span> Scarica PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="gradient-hr">
+
+  <!-- CTA CONTATTI -->
+  <section id="contatti" class="cta-section">
+    <div class="cta-inner">
+      <p class="s-tag" style="text-align:center; margin-bottom:14px;">Contattaci</p>
+      <h2 class="cta-title">Prima consulenza<br><span class="acc-g">completamente gratuita</span></h2>
+      <p class="cta-sub">Chiamaci, scrivici o vieni in studio. I nostri professionisti sono a tua disposizione per analizzare la tua situazione e proporti la soluzione più adatta.</p>
+      <div class="cta-chips">
+        <a href="tel:0382426597" class="contact-chip"><span>📞</span> 0382-426597</a>
+        <a href="/cdn-cgi/l/email-protection#e89b9c9d8c8187a88f8c899c899b87849d9c8187869bc6819c" class="contact-chip"><span>✉️</span> <span class="__cf_email__" data-cfemail="d7a4a3a2b3beb897b0b3b6a3b6a4b8bba2a3beb8b9a4f9bea3">[email&#160;protected]</span></a>
+      </div>
+      <div class="cta-actions">
+        <a href="/cdn-cgi/l/email-protection#3043444554595f705754514451435f5c4544595f5e431e5944" class="btn-primary">Scrivici ora →</a>
+        <a href="tel:0382426597" class="btn-ghost">Chiamaci</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-col">
+      <a href="#" class="logo-inline" style="text-decoration:none; margin-bottom:4px;">
+        <div class="logo-letters" style="font-size:22px;"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+        <div class="logo-sep" style="height:22px;"></div>
+        <span class="logo-name" style="font-size:12px; color:var(--muted);">Giussani Data Solutions</span>
+      </a>
+      <span>GIUSSANI DATA SOLUTIONS SRL</span>
+      <span>Società di consulenza contabile tributaria</span>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Sede legale</span>
+      <span>P.zza Antoniotto Adorno Botta, 1</span>
+      <span>27100 Pavia (PV)</span>
+      <span style="margin-top: 8px;">C.F. e P.IVA 02951580188</span>
+      <span>Codice SDI: KRRH6B9</span>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Contatti</span>
+      <a href="tel:0382426597">0382-426597</a>
+      <a href="/cdn-cgi/l/email-protection#32414647565b5d725556534653415d5e47465b5d5c411c5b46"><span class="__cf_email__" data-cfemail="7102050415181e311615100510021e1d0405181e1f025f1805">[email&#160;protected]</span></a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2026 GIUSSANI DATA SOLUTIONS SRL · P.IVA 02951580188</span>
+    <span><a href="#">Privacy Policy</a> · <a href="#">Cookie</a></span>
+  </div>
+
+</div>
+
+<!-- ══ FLOW OVERLAY (Hidden by default) ══ -->
+<div id="flow-overlay" class="flow-overlay hidden">
+  <div class="flow-container" id="flow-content">
+    <!-- Dynamic flow content injected here -->
+  <!-- ══════════════════════════════════════════
+       FLOW: Idea → Business
+  ══════════════════════════════════════════ -->
+  <div id="flow-idea" class="screen hidden">
+    <div class="section-screen" id="idea-1">
+      <div class="progress-bar">
+        <span>1 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🚀</div>
+        <h2 class="section-title">Da dove iniziamo?<br>La tua idea</h2>
+        <p class="section-text">
+          Trasformare un'idea in impresa richiede strategia, struttura e competenza. GDS ti accompagna in ogni fase: dalla validazione dell'idea al business plan, fino alla costituzione formale.
+        </p>
+        <div class="section-actions">
+          <button class="btn-primary" onclick="nextStep('idea', 2)">Iniziamo →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-2">
+      <div class="progress-bar">
+        <span>2 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">📋</div>
+        <h2 class="section-title">Hai già un Business Plan?</h2>
+        <p class="section-text">
+          Il Business Plan è la mappa della tua impresa: descrive il progetto, i costi, i ricavi attesi e la strategia di crescita.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'businessplan', 'si'); nextStep('idea', 3)">Sì, ce l'ho già</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'businessplan', 'no'); nextStep('idea', 3)">No, devo ancora crearlo</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'businessplan', 'nonsoprire'); nextStep('idea', 3)">Non so cosa sia</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-3">
+      <div class="progress-bar">
+        <span>3 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🎯</div>
+        <h2 class="section-title">Quale settore?</h2>
+        <p class="section-text">
+          Ogni settore ha caratteristiche specifiche: normative, agevolazioni fiscali, bandi dedicati. Seleziona l'area della tua idea.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'trasporti'); nextStep('idea', 4)">🚗 Trasporti (Taxi, NCC)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'tech'); nextStep('idea', 4)">💻 Tech / SaaS</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'food'); nextStep('idea', 4)">🍔 Food & Beverage</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'retail'); nextStep('idea', 4)">🏪 Retail / E-commerce</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'edilizia'); nextStep('idea', 4)">🏗 Edilizia / Artigianato</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'settore', 'altro'); nextStep('idea', 4)">🎨 Altro settore</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-4">
+      <div class="progress-bar">
+        <span>4 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">👥</div>
+        <h2 class="section-title">Quante persone coinvolte?</h2>
+        <p class="section-text">
+          Il numero di soci e collaboratori influisce sulla scelta della forma giuridica e sulla gestione amministrativa.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'persone', 1); nextStep('idea', 5)">Solo io</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'persone', 2); nextStep('idea', 5)">2-3 persone</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'persone', 4); nextStep('idea', 5)">4+ persone</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-5">
+      <div class="progress-bar">
+        <span>5 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🔄</div>
+        <h2 class="section-title">Stai acquisendo un'attività<br>già esistente?</h2>
+        <p class="section-text">
+          La modalità di avvio influisce su pratiche, costi e tempistiche.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option quiz-option-desc" onclick="selectQuiz(this); storeAnswer('idea', 'acquisizione', 'si'); nextStep('idea', 6)">
+            <strong>Sì</strong>
+            <span class="option-desc">Cessione d'azienda, subentro, valutazione patrimonio</span>
+          </button>
+          <button class="quiz-option quiz-option-desc" onclick="selectQuiz(this); storeAnswer('idea', 'acquisizione', 'no'); nextStep('idea', 6)">
+            <strong>No</strong>
+            <span class="option-desc">Costituzione ex novo</span>
+          </button>
+          <button class="quiz-option quiz-option-desc" onclick="selectQuiz(this); storeAnswer('idea', 'acquisizione', 'indeciso'); nextStep('idea', 6)">
+            <strong>Sono indeciso</strong>
+            <span class="option-desc">Esplorazione opportunità mercato</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-6">
+      <div class="progress-bar">
+        <span>6 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">⏰</div>
+        <h2 class="section-title">Quando vuoi avviare l'attività?</h2>
+        <p class="section-text">
+          Le tempistiche ci aiutano a pianificare il percorso più adatto.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'tempistiche', '1mese'); nextStep('idea', 7)">Entro 1 mese (urgente)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'tempistiche', '3mesi'); nextStep('idea', 7)">Entro 3 mesi</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'tempistiche', '6mesi'); nextStep('idea', 7)">Entro 6 mesi</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('idea', 'tempistiche', 'oltre6'); nextStep('idea', 7)">Oltre 6 mesi (sto pianificando)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-7">
+      <div class="progress-bar">
+        <span>7 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💰</div>
+        <h2 class="section-title">Come intendi finanziare<br>il progetto?</h2>
+        <p class="section-text">
+          Puoi selezionare più opzioni. Questo ci aiuta a suggerirti gli strumenti più adatti.
+        </p>
+        <div class="quiz-options multiselect-options" id="idea-finance-options">
+          <button class="quiz-option quiz-checkbox" onclick="toggleMultiSelect(this, 'idea', 'finanziamento', 'mezzi_propri')">
+            <span class="checkbox">☐</span>
+            <span class="text">Con mezzi propri</span>
+          </button>
+          <button class="quiz-option quiz-checkbox" onclick="toggleMultiSelect(this, 'idea', 'finanziamento', 'assistenza')">
+            <span class="checkbox">☐</span>
+            <span class="text">Ho bisogno di assistenza per finanziare il progetto</span>
+          </button>
+          <button class="quiz-option quiz-checkbox" onclick="toggleMultiSelect(this, 'idea', 'finanziamento', 'alternativi')">
+            <span class="checkbox">☐</span>
+            <span class="text">Vorrei saperne di più sugli strumenti alternativi (crowdfunding, bandi, ecc.)</span>
+          </button>
+        </div>
+        <div class="section-actions">
+          <button class="btn-primary" onclick="validateAndNext('idea', 7, 8)">Avanti →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="idea-8">
+      <div class="progress-bar">
+        <span>8 di 8</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">✅</div>
+        <h2 class="section-title">Il tuo profilo imprenditoriale</h2>
+        
+        <!-- Dynamic report content -->
+        <div id="idea-report" class="report-box"></div>
+
+        <!-- Email form -->
+        <div class="email-form">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">📧 Ricevi il report via email</h3>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">Ti invieremo un report dettagliato con tutti i servizi personalizzati per il tuo progetto.</p>
+          <form id="idea-email-form" onsubmit="sendIdeaReport(event)">
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto;">
+              <input type="text" name="nome" placeholder="Nome e Cognome" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="email" name="email" placeholder="Email" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px;">Invia report →</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-actions" style="margin-top: 32px;">
+          <button class="btn-secondary" onclick="goHome()">Torna alla home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FLOW: Verifica requisiti startup
+  ══════════════════════════════════════════ -->
+  <div id="flow-verify" class="screen hidden">
+    <div class="section-screen" id="verify-1">
+      <div class="progress-bar">
+        <span>1 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🚀</div>
+        <h2 class="section-title">Verifica requisiti<br>Startup Innovativa</h2>
+        <p class="section-text">
+          Le startup innovative godono di numerosi vantaggi: esenzione da bollo e diritti camerali, disciplina del lavoro flessibile, equity crowdfunding, facilitazioni per l'accesso al credito e incentivi fiscali. Verifichiamo insieme se hai i requisiti.
+        </p>
+        <div class="section-actions">
+          <button class="btn-primary" onclick="nextStep('verify', 2)">Inizia la verifica →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-2">
+      <div class="progress-bar">
+        <span>2 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🇮🇹</div>
+        <h2 class="section-title">Residenza in Italia o UE</h2>
+        <p class="section-text">
+          La società deve essere residente in Italia o in uno degli Stati membri dell'Unione europea, purché abbia una sede produttiva o una filiale in Italia.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'residenza', true); nextStep('verify', 3)">✓ Sì, ho sede/filiale in Italia</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'residenza', false); nextStep('verify', 3)">✗ No, non ho sede in Italia</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-3">
+      <div class="progress-bar">
+        <span>3 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">📅</div>
+        <h2 class="section-title">Costituita da meno di 60 mesi</h2>
+        <p class="section-text">
+          La società deve essere costituita da non più di 60 mesi (5 anni) e deve aver iniziato l'attività d'impresa. La data di costituzione è rilevabile nella Visura Ordinaria del Registro Imprese.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'eta', true); nextStep('verify', 4)">✓ Sì, meno di 5 anni</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'eta', false); nextStep('verify', 4)">✗ No, più di 5 anni</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-4">
+      <div class="progress-bar">
+        <span>4 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💸</div>
+        <h2 class="section-title">Non ha distribuito utili</h2>
+        <p class="section-text">
+          La startup innovativa non deve aver distribuito e non deve distribuire utili ai soci.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'utili', true); nextStep('verify', 5)">✓ Non ho distribuito utili</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'utili', false); showVerifyResult()">✗ Ho distribuito utili</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-5">
+      <div class="progress-bar">
+        <span>5 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">📊</div>
+        <h2 class="section-title">Valore produzione < 5 milioni €</h2>
+        <p class="section-text">
+          A partire dal secondo anno di attività, il totale del valore della produzione annua non deve superare 5 milioni di euro (dall'ultimo bilancio approvato).
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'fatturato', true); nextStep('verify', 6)">✓ Meno di 5 milioni €</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'fatturato', false); showVerifyResult()">✗ Più di 5 milioni €</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-6">
+      <div class="progress-bar">
+        <span>6 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🔄</div>
+        <h2 class="section-title">Non nata da fusione/scissione</h2>
+        <p class="section-text">
+          La società non deve essere stata costituita da fusione, scissione societaria o a seguito di cessione di azienda o di ramo di azienda.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'fusione', true); nextStep('verify', 7)">✓ Costituzione ex novo</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'fusione', false); showVerifyResult()">✗ Nata da fusione/scissione</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-7">
+      <div class="progress-bar">
+        <span>7 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💡</div>
+        <h2 class="section-title">Oggetto sociale innovativo</h2>
+        <p class="section-text">
+          L'oggetto sociale esclusivo o prevalente deve essere lo sviluppo, la produzione e la commercializzazione di prodotti o servizi innovativi ad alto valore tecnologico. Non deve svolgere attività prevalente di agenzia o consulenza.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'oggetto', true); nextStep('verify', 8)">✓ Sì, prodotti/servizi innovativi</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'oggetto', false); showVerifyResult()">✗ No, attività tradizionale</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-8">
+      <div class="progress-bar">
+        <span>8 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🎯</div>
+        <h2 class="section-title">Almeno 1 di questi 3 requisiti</h2>
+        <p class="section-text">
+          Devi possedere almeno uno dei seguenti requisiti specifici:
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'rs'); validateAndProceedVerify()">💰 Spese R&S ≥ 15% del valore produzione</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'team'); validateAndProceedVerify()">👨‍🎓 Team qualificato (1/3 con dottorato o 2/3 con magistrale)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'brevetto'); validateAndProceedVerify()">📜 Brevetto/software registrato</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', false); showVerifyResult()">✗ Nessuno dei tre</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="verify-9">
+      <div class="progress-bar">
+        <span>9 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">📊</div>
+        <h2 class="section-title">Verifica Completata</h2>
+        
+        <!-- Dynamic report content -->
+        <div id="verify-report" class="report-box"></div>
+
+        <!-- Email form -->
+        <div class="email-form">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">📧 Ricevi il report dettagliato</h3>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">Ti invieremo un'analisi completa dei requisiti con i prossimi passi consigliati.</p>
+          <form id="verify-email-form" onsubmit="sendVerifyReport(event)">
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto;">
+              <input type="text" name="nome" placeholder="Nome e Cognome" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="email" name="email" placeholder="Email" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="text" name="azienda" placeholder="Nome Azienda (opzionale)" 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px;">Invia report →</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-actions" style="margin-top: 32px;">
+          <button class="btn-secondary" onclick="goHome()">Torna alla home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FLOW: Scegliere la struttura
+  ══════════════════════════════════════════ -->
+  <div id="flow-structure" class="screen hidden">
+    <div class="section-screen" id="structure-1">
+      <div class="progress-bar">
+        <span>1 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">⚖️</div>
+        <h2 class="section-title">Quale struttura giuridica?</h2>
+        <p class="section-text">
+          La scelta della forma giuridica impatta su responsabilità patrimoniale, tassazione, costi di gestione e flessibilità operativa. Ti guidiamo verso la soluzione più adatta al tuo progetto.
+        </p>
+        <div class="section-actions">
+          <button class="btn-primary" onclick="nextStep('structure', 2)">Iniziamo →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="structure-2">
+      <div class="progress-bar">
+        <span>2 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">👥</div>
+        <h2 class="section-title">Quanti soci/fondatori?</h2>
+        <p class="section-text">
+          Il numero di persone coinvolte è un primo elemento discriminante.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'soci', 1); nextStep('structure', 3)">Solo io</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'soci', 2); nextStep('structure', 3)">2-3 persone</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'soci', 4); nextStep('structure', 3)">4 o più persone</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="structure-3">
+      <div class="progress-bar">
+        <span>3 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🏗</div>
+        <h2 class="section-title">Livello di rischio dell'attività</h2>
+        <p class="section-text">
+          Un'attività con maggiori rischi patrimoniali (es. investimenti elevati, contratti importanti, responsabilità verso terzi) richiede protezione del patrimonio personale.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'rischio', 'basso'); nextStep('structure', 4)">🟢 Basso (attività familiare/professionale)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'rischio', 'medio'); nextStep('structure', 4)">🟡 Medio (piccola impresa commerciale)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'rischio', 'alto'); nextStep('structure', 4)">🔴 Alto (investimenti significativi, contratti importanti)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="structure-4">
+      <div class="progress-bar">
+        <span>4 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💰</div>
+        <h2 class="section-title">Capitale iniziale disponibile</h2>
+        <p class="section-text">
+          Alcune forme societarie richiedono un capitale sociale minimo. Per le SRL serve almeno 1€ (SRLS) o importi superiori per SRL ordinarie.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'capitale', 'minimo'); nextStep('structure', 5)">Minimo (< 10.000€)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'capitale', 'medio'); nextStep('structure', 5)">Medio (10.000€ - 50.000€)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'capitale', 'alto'); nextStep('structure', 5)">Alto (> 50.000€)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="structure-5">
+      <div class="progress-bar">
+        <span>5 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🚀</div>
+        <h2 class="section-title">Ambizioni di crescita</h2>
+        <p class="section-text">
+          Pensi di cercare investitori esterni, quotarti in borsa o scalare rapidamente?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'crescita', 'no'); nextStep('structure', 6)">No, attività stabile e locale</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'crescita', 'media'); nextStep('structure', 6)">Crescita graduale, possibile espansione</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('structure', 'crescita', 'alta'); nextStep('structure', 6)">Sì, voglio scalare e cercare investitori</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="structure-6">
+      <div class="progress-bar">
+        <span>6 di 6</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">✅</div>
+        <h2 class="section-title">La struttura consigliata</h2>
+        <div class="result-box success" id="structure-result">
+          <div class="result-icon">🏢</div>
+          <h3 class="result-title" id="structure-result-title">Società a Responsabilità Limitata (SRL)</h3>
+          <p class="result-text" id="structure-result-text">
+            In base alle tue risposte, la SRL è la forma più adatta: protegge il patrimonio personale (responsabilità limitata al capitale conferito), offre flessibilità gestionale e credibilità verso clienti e fornitori.
+          </p>
+        </div>
+
+        <div class="checklist" id="structure-checklist">
+          <div class="checklist-item done">
+            <span class="checklist-icon">✓</span>
+            <span>Responsabilità limitata al capitale</span>
+          </div>
+          <div class="checklist-item done">
+            <span class="checklist-icon">✓</span>
+            <span>Flessibilità operativa</span>
+          </div>
+          <div class="checklist-item done">
+            <span class="checklist-icon">✓</span>
+            <span>Adatta per cercare investitori</span>
+          </div>
+          <div class="checklist-item pending">
+            <span class="checklist-icon">⚠</span>
+            <span>Costi contabili/amministrativi più elevati</span>
+          </div>
+        </div>
+
+        <!-- Email form -->
+        <div class="email-form">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">📧 Ricevi consulenza personalizzata</h3>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">Ti invieremo informazioni dettagliate sulla forma giuridica consigliata e i costi di costituzione.</p>
+          <form id="structure-email-form" onsubmit="sendStructureReport(event)">
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto;">
+              <input type="text" name="nome" placeholder="Nome e Cognome" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="email" name="email" placeholder="Email" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px;">Richiedi consulenza →</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-actions" style="margin-top: 32px;">
+          <button class="btn-secondary" onclick="goHome()">Torna alla home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FLOW: Finanziare il progetto
+  ══════════════════════════════════════════ -->
+  <div id="flow-finance" class="screen hidden">
+    <div class="section-screen" id="finance-1">
+      <div class="progress-bar">
+        <span>1 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💰</div>
+        <h2 class="section-title">Come finanziare<br>la tua impresa</h2>
+        <p class="section-text">
+          Esistono molte opzioni per raccogliere capitale: crowdfunding, bandi regionali, agevolazioni fiscali, credito bancario agevolato e incentivi all'investimento. Troviamo insieme la strada migliore.
+        </p>
+        <div class="section-actions">
+          <button class="btn-primary" onclick="nextStep('finance', 2)">Esploriamo le opzioni →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-2">
+      <div class="progress-bar">
+        <span>2 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🎯</div>
+        <h2 class="section-title">Fase del progetto</h2>
+        <p class="section-text">
+          Diverse fasi richiedono strumenti diversi. In quale fase ti trovi?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'idea'); nextStep('finance', 3)">💡 Idea / Pre-seed (prima di partire)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'startup'); nextStep('finance', 3)">🚀 Startup / Seed (primi 2 anni)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'crescita'); nextStep('finance', 3)">📈 Crescita / Scaling (espansione)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'consolidata'); nextStep('finance', 3)">🏢 Impresa consolidata (migliorare struttura)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-3">
+      <div class="progress-bar">
+        <span>3 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💵</div>
+        <h2 class="section-title">Capitale necessario</h2>
+        <p class="section-text">
+          Di quanto capitale hai bisogno per raggiungere il prossimo traguardo?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'capitale', 'micro'); nextStep('finance', 4)">< 10.000€</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'capitale', 'piccolo'); nextStep('finance', 4)">10.000€ - 50.000€</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'capitale', 'medio'); nextStep('finance', 4)">50.000€ - 250.000€</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'capitale', 'grande'); nextStep('finance', 4)'>> 250.000€</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-4">
+      <div class="progress-bar">
+        <span>4 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🏢</div>
+        <h2 class="section-title">Sei già una società di capitali?</h2>
+        <p class="section-text">
+          Alcuni strumenti di finanziamento (equity crowdfunding, investitori) sono accessibili solo a SRL/SPA.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'societa_capitali', 'si'); nextStep('finance', 5)">Sì, sono SRL/SPA</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'societa_capitali', 'no'); nextStep('finance', 5)">No, sono individuale/SNC/SAS</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'societa_capitali', 'nonancora'); nextStep('finance', 5)">Non ho ancora costituito</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-5">
+      <div class="progress-bar">
+        <span>5 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🚀</div>
+        <h2 class="section-title">Hai requisiti startup innovativa?</h2>
+        <p class="section-text">
+          Le startup innovative accedono a canali esclusivi come equity crowdfunding e agevolazioni fiscali potenziate.
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'startup', 'si'); nextStep('finance', 6)">Sì, sono startup innovativa</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'startup', 'forse'); nextStep('finance', 6)">Forse, devo verificare</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'startup', 'no'); nextStep('finance', 6)">No</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-6">
+      <div class="progress-bar">
+        <span>6 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🤝</div>
+        <h2 class="section-title">Disponibilità a cedere quote</h2>
+        <p class="section-text">
+          Sei disposto a far entrare investitori esterni cedendo una parte della proprietà dell'azienda?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'equity', true); nextStep('finance', 7)">Sì, sono aperto a investitori</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'equity', false); nextStep('finance', 7)">No, preferisco mantenere il controllo totale</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-7">
+      <div class="progress-bar">
+        <span>7 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🏦</div>
+        <h2 class="section-title">Garanzie patrimoniali</h2>
+        <p class="section-text">
+          Hai garanzie (immobili, fideiussioni) da offrire per un prestito bancario?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'garanzie', true); nextStep('finance', 8)">Sì, ho garanzie solide</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'garanzie', false); nextStep('finance', 8)">No, poche/nessuna garanzia</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-8">
+      <div class="progress-bar">
+        <span>8 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">🌐</div>
+        <h2 class="section-title">Community e visibilità</h2>
+        <p class="section-text">
+          Hai una community o sei disposto a promuovere pubblicamente il progetto per raccogliere fondi dalla "folla" (crowdfunding)?
+        </p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'community', true); generateFinanceReport(); nextStep('finance', 9)">Sì, ho/posso costruire visibilità</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'community', false); generateFinanceReport(); nextStep('finance', 9)">No, preferisco canali privati</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-screen hidden" id="finance-9">
+      <div class="progress-bar">
+        <span>9 di 9</span>
+        <div class="progress-dots">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+          <div class="progress-dot active"></div>
+        </div>
+      </div>
+
+      <div class="section-content">
+        <div class="section-icon">💡</div>
+        <h2 class="section-title">Le tue opzioni personalizzate</h2>
+        
+        <!-- Dynamic report content -->
+        <div id="finance-report" class="report-box"></div>
+
+        <!-- Email form -->
+        <div class="email-form">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">📧 Ricevi la guida completa</h3>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">Ti invieremo una guida dettagliata con tutte le opzioni di finanziamento accessibili per il tuo profilo.</p>
+          <form id="finance-email-form" onsubmit="sendFinanceReport(event)">
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto;">
+              <input type="text" name="nome" placeholder="Nome e Cognome" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="email" name="email" placeholder="Email" required 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <input type="text" name="progetto" placeholder="Nome Progetto (opzionale)" 
+                style="padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.03); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px;">
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px;">Richiedi guida →</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-actions" style="margin-top: 32px;">
+          <button class="btn-secondary" onclick="goHome()">Torna alla home</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="section-actions">
+          <button class="btn-primary" onclick="window.location.href='mailto:consulenza@gc-srl.it'">Richiedi supporto →</button>
+          <button class="btn-secondary" onclick="goHome()">Torna alla home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gds-interactive-flows/1.0.0/flows.min.js"></script>
+<script>
+/* ── MESH GRADIENT ── */
+const canvas = document.getElementById('mesh-bg');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+const orbs = [
+  { x:0.15, y:0.20, sx:0.00018, sy:0.00012, r:0.55, c:'66,133,244',  a:0.13 },
+  { x:0.80, y:0.15, sx:-0.00014,sy:0.00016, r:0.45, c:'234,67,53',   a:0.09 },
+  { x:0.70, y:0.80, sx:-0.00010,sy:-0.00018,r:0.50, c:'52,168,83',   a:0.10 },
+  { x:0.30, y:0.75, sx:0.00020, sy:-0.00014,r:0.40, c:'251,188,5',   a:0.08 },
+];
+let t = 0;
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  orbs.forEach(o => {
+    const px = (o.x + Math.sin(t * o.sx * 900 + o.r) * 0.18) * W;
+    const py = (o.y + Math.cos(t * o.sy * 900 + o.r) * 0.15) * H;
+    const rad = o.r * Math.max(W, H);
+    const g = ctx.createRadialGradient(px,py,0,px,py,rad);
+    g.addColorStop(0,   `rgba(${o.c},${o.a})`);
+    g.addColorStop(0.5, `rgba(${o.c},${o.a*0.35})`);
+    g.addColorStop(1,   `rgba(${o.c},0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  });
+  t++;
+  requestAnimationFrame(draw);
+}
+draw();
+setTimeout(() => { canvas.style.opacity = '1'; }, 120);
+
+/* ── NAVIGATION ── */
+function showMainContent() {
+  document.getElementById('main-content').classList.remove('hidden');
+  document.getElementById('flow-overlay').classList.add('hidden');
+  document.querySelector('.nav-links').classList.remove('hidden');
+  document.querySelector('.nav-back').classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const top = el.offsetTop - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+/* ── FLOW HANDLING ── */
+let currentFlowData = null;
+
+function openFlow(flowName) {
+  // Hide main content
+  document.getElementById('main-content').classList.add('hidden');
+  document.querySelector('.nav-links').classList.add('hidden');
+  document.querySelector('.nav-back').classList.remove('hidden');
+  
+  // Show overlay
+  const overlay = document.getElementById('flow-overlay');
+  overlay.classList.remove('hidden');
+  
+  // Load flow content from gds_interactive.html (simplified inline version)
+  loadFlowContent(flowName);
+  
+  window.scrollTo({ top: 0 });
+}
+
+function closeFlow() {
+  showMainContent();
+}
+
+function loadFlowContent(flowName) {
+  const container = document.getElementById('flow-content');
+  
+  // This is a simplified inline version - in production you'd load from the full interactive file
+  // For now, showing a placeholder that links to full experience
+  
+  const flowTitles = {
+    idea: { icon: '💡', title: 'Da Idea a Business', desc: 'Ti guidiamo dalla validazione dell\'idea al business plan e alla costituzione.' },
+    verify: { icon: '🏢', title: 'Verifica Startup Innovativa', desc: 'Controlliamo insieme se hai tutti i requisiti per diventare startup innovativa.' },
+    structure: { icon: '⚖️', title: 'Scegliere la Struttura', desc: 'Troviamo la forma giuridica ottimale: individuale, SNC, SRL o startup.' },
+    finance: { icon: '💰', title: 'Finanziare il Progetto', desc: 'Esploriamo crowdfunding, bandi, agevolazioni fiscali e credito.' }
+  };
+  
+  const flow = flowTitles[flowName];
+  
+  container.innerHTML = `
+    <div class="section-content">
+      <div class="section-icon">${flow.icon}</div>
+      <h2 class="section-title">${flow.title}</h2>
+      <p class="section-text">${flow.desc}</p>
+      <p class="section-text" style="margin-top: 20px; font-size: 13px;">
+        <strong>Percorso guidato completo disponibile.</strong><br>
+        Prenota una cons
