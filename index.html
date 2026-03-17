@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDS – Giussani Data Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+  /* — HERO — */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 140px 48px 100px; overflow: hidden; z-index: 1;
+  }
+  .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+  .orb1 { top: -200px; left: -200px; width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(66,133,244,0.09) 0%, transparent 70%); }
+  .orb2 { bottom: -100px; right: -100px; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(52,168,83,0.07) 0%, transparent 70%); }
+  .orb3 { top: 40%; left: 50%; width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(234,67,53,0.05) 0%, transparent 70%); }
+  .hero-content { position: relative; z-index: 1; max-width: 740px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(66,133,244,0.08); border: 1px solid rgba(66,133,244,0.2);
+    border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .badge-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: pulse 2s infinite; }
+  .hero-badge span { font-size: 12px; color: #7ab3f8; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+  .hero-title {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .acc-b { color: var(--blue); } .acc-r { color: var(--red); }
+  .acc-g { color: var(--green); } .acc-y { color: var(--yellow); }
+  .hero-sub {
+    font-size: 17px; font-weight: 300; color: var(--muted);
+    max-width: 520px; line-height: 1.75; margin-bottom: 48px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 72px; padding-top: 40px;
+    border-top: 1px solid var(--border); flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .stat { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num { font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; }
+
+  /* — PERCORSI SECTION — */
+  .path-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .path-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px; cursor: pointer; text-decoration: none;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; text-align: center;
+  }
+  .path-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  }
+  .path-icon { font-size: 48px; line-height: 1; filter: grayscale(0.2); }
+  .path-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+  .path-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.6; flex: 1; }
+  .path-arrow { color: var(--blue); font-size: 20px; margin-top: auto; }
+
+  /* — CTA SECTION — */
+  .cta-section {
+    text-align: center; padding: 110px 48px; position: relative; overflow: hidden; z-index: 1;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 700px; height: 350px;
+    background: radial-gradient(ellipse, rgba(66,133,244,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-inner { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; }
+  .cta-title { font-size: clamp(30px, 5vw, 52px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; }
+  .cta-sub { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.75; margin-bottom: 32px; }
+  .cta-chips { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+  .contact-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: 13px; color: var(--text); text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .contact-chip:hover { border-color: rgba(255,255,255,0.15); }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* — CANVAS MESH — */
+  #mesh-bg {
+    position: fixed; inset: 0; z-index: 1;
+    pointer-events: none; opacity: 0; transition: opacity 1.2s ease;
+  }
+  </style>
+</head>
+<body>
+
+  <canvas id="mesh-bg"></canvas>
+
+  <!-- == NAVBAR == -->
+  <nav>
+    <a href="index.html" class="logo-inline">
+      <div class="logo-letters"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+      <div class="logo-sep"></div>
+      <span class="logo-name">Giussani Data Solutions</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="percorsi.html">Percorsi</a></li>
+      <li><a href="strumenti.html">Strumenti</a></li>
+      <li><a href="guide.html">Guide</a></li>
+      <li><a href="servizi.html">Servizi</a></li>
+      <li><a href="#contatti" class="nav-cta">Consulenza gratuita</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- == MAIN CONTENT == -->
+  <div class="main-content">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-orb orb1"></div>
+      <div class="hero-orb orb2"></div>
+      <div class="hero-orb orb3"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <div class="badge-dot"></div>
+          <span>Tributaristi Certificati · Pavia</span>
+        </div>
+        <h1 class="hero-title">
+          Dicci che imprenditore sei,<br>noi ti diremo come<br>
+          <span class="acc-b">costruire</span> <span class="acc-r">la tua</span> <span class="acc-g">impresa</span><span class="acc-y">.</span>
+        </h1>
+        <p class="hero-sub">GDS è una società di consulenza contabile e tributaria. Affianchiamo professionisti e imprese in ogni fase del loro percorso, dalla costituzione alla crescita.</p>
+        <div class="hero-actions">
+          <a href="#contatti" class="btn-primary">Prima consulenza gratuita →</a>
+          <a href="percorsi.html" class="btn-ghost">Scopri i percorsi</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num acc-b">450+</span><span class="stat-label">Business plan validati</span></div>
+          <div class="stat"><span class="stat-num acc-r">1,2 mln</span><span class="stat-label">Movimenti contabili gestiti</span></div>
+          <div class="stat"><span class="stat-num acc-g">14</span><span class="stat-label">Professionisti e collaboratori</span></div>
+          <div class="stat"><span class="stat-num acc-y">1.5x</span><span class="stat-label">Aumento fatturato clienti</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="gradient-hr">
+
+    <!-- PERCORSI -->
+    <section id="percorsi">
+      <div class="s-inner">
+        <p class="s-tag">Trova il tuo percorso</p>
+        <h2 class="s-title">Scegli il percorso più adatto<br>alla tua situazione</h2>
+        <p class="s-sub">Ti guidiamo passo dopo passo: dalla validazione dell'idea alla verifica dei requisiti startup, fino alla scelta della struttura giuridica e al finanziamento.</p>
+        <div class="path-grid">
+          <a class="path-card" href="percorsi.html?flow=idea">
+            <div class="path-icon">💡</div>
+            <h3 class="path-title">Ho un'idea</h3>
+            <p class="path-desc">Non ho ancora un'impresa ma voglio capire come trasformare la mia idea in un business concreto.</p>
+            <div class="path-arrow">›</div>
+          </a>
+          <a class="path-card" href="percorsi.html?flow=verify">
+            <div class="path-icon">🔍</div>
+            <h3 class="path-title">Ho sentito parlare di Startup Innovativa</h3>
+            <p class="path-desc">Voglio verificare se ho i requisiti per diventare startup innovativa e accedere alle agevolazioni della legge 221/2012.</p>
+            <div class="path-arrow">›</div>
+          </a>
+          <a class="path-card" href="percorsi.html?flow=structure">
+            <div class="path-icon">🏛</div>
+            <h3 class="path-title">Voglio scegliere la struttura giusta</h3>
+            <p class="path-desc">Devo capire quale forma societaria è più adatta al mio progetto: ditta individuale, SNC, SRL o SRLS.</p>
+            <div class="path-arrow">›</div>
+          </a>
+          <a class="path-card" href="percorsi.html?flow=finance">
+            <div class="path-icon">💰</div>
+            <h3 class="path-title">Voglio trovare finanziamenti per il mio progetto</h3>
+            <p class="path-desc">Voglio scoprire le opzioni di finanziamento disponibili: crowdfunding, bandi, agevolazioni fiscali e credito.</p>
+            <div class="path-arrow">›</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="gradient-hr">
+
+    <!-- CTA CONTATTI -->
+    <section id="contatti" class="cta-section">
+      <div class="cta-inner">
+        <p class="s-tag" style="text-align:center; margin-bottom:14px;">Contattaci</p>
+        <h2 class="cta-title">Prima consulenza<br><span class="acc-g">completamente gratuita</span></h2>
+        <p class="cta-sub">Chiamaci, scrivici o vieni in studio. I nostri professionisti sono a tua disposizione per analizzare la tua situazione e proporti la soluzione più adatta.</p>
+        <div class="cta-chips">
+          <a href="tel:0382426597" class="contact-chip"><span>📞</span> 0382-426597</a>
+          <a href="mailto:info@gdstributaristi.it" class="contact-chip"><span>✉️</span> info@gdstributaristi.it</a>
+        </div>
+        <div class="cta-actions">
+          <a href="mailto:info@gdstributaristi.it" class="btn-primary">Scrivici ora →</a>
+          <a href="tel:0382426597" class="btn-ghost">Chiamaci</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-col">
+        <a href="index.html" class="logo-inline" style="text-decoration:none; margin-bottom:4px;">
+          <div class="logo-letters" style="font-size:22px;"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
+          <div class="logo-sep" style="height:22px;"></div>
+          <span class="logo-name" style="font-size:12px; color:var(--muted);">Giussani Data Solutions</span>
+        </a>
+        <span>GIUSSANI DATA SOLUTIONS SRL</span>
+        <span>Società di consulenza contabile tributaria</span>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Sede legale</span>
+        <span>P.zza Antoniotto Adorno Botta, 1</span>
+        <span>27100 Pavia (PV)</span>
+        <span style="margin-top:8px;">C.F. e P.IVA 02951580188</span>
+        <span>Codice SDI: KRRH6B9</span>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Contatti</span>
+        <a href="tel:0382426597">0382-426597</a>
+        <a href="mailto:info@gdstributaristi.it">info@gdstributaristi.it</a>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Navigazione</span>
+        <a href="percorsi.html">Percorsi</a>
+        <a href="strumenti.html">Strumenti</a>
+        <a href="guide.html">Guide</a>
+        <a href="servizi.html">Servizi</a>
+      </div>
+    </footer>
+    <div class="footer-bottom">
+      <span>© 2026 GIUSSANI DATA SOLUTIONS SRL · P.IVA 02951580188</span>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Cookie</a></span>
+    </div>
+
+  </div>
+
+  <script>
+  /* — MESH GRADIENT — */
+  const canvas = document.getElementById('mesh-bg');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const orbs = [
+    { x:0.15, y:0.20, sx:0.00018, sy:0.00012, r:0.55, c:'66,133,244', a:0.13 },
+    { x:0.80, y:0.15, sx:-0.00014, sy:0.00016, r:0.45, c:'234,67,53', a:0.09 },
+    { x:0.70, y:0.80, sx:-0.00010, sy:-0.00018, r:0.50, c:'52,168,83', a:0.10 },
+    { x:0.30, y:0.75, sx:0.00020, sy:-0.00014, r:0.40, c:'251,188,5', a:0.08 },
+  ];
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    orbs.forEach(o => {
+      const px = (o.x + Math.sin(t * o.sx * 900 + o.r) * 0.18) * W;
+      const py = (o.y + Math.cos(t * o.sy * 900 + o.r) * 0.15) * H;
+      const rad = o.r * Math.max(W, H);
+      const g = ctx.createRadialGradient(px,py,0,px,py,rad);
+      g.addColorStop(0, `rgba(${o.c},${o.a})`);
+      g.addColorStop(0.5, `rgba(${o.c},${o.a*0.35})`);
+      g.addColorStop(1, `rgba(${o.c},0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
+    });
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+  setTimeout(() => { canvas.style.opacity = '1'; }, 120);
+
+  /* — MOBILE MENU — */
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+  </script>
+</body>
+</html>

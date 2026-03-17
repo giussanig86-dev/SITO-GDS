@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GDS — Il tuo percorso imprenditoriale</title>
+<title>Percorsi – GDS Giussani Data Solutions</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -35,8 +35,8 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 0 32px;
-  height: 64px;
+  padding: 0 48px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,27 +44,17 @@ nav {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-.logo .g { color: var(--blue); }
-.logo .d { color: var(--red); }
-.logo .s { color: var(--green); }
-.logo-sep {
-  width: 1.5px;
-  height: 22px;
-  background: linear-gradient(180deg, var(--blue), var(--red), var(--yellow), var(--green));
-  border-radius: 2px;
-}
-.logo-text { font-size: 11px; color: var(--muted); font-weight: 400; }
-
+.logo-inline { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
+.logo-letters { font-weight: 800; font-size: 28px; letter-spacing: -0.04em; line-height: 1; display: flex; }
+.l-g { color: #4285F4; } .l-d { color: #EA4335; } .l-s { color: #34A853; }
+.logo-sep { width: 1.5px; height: 28px; background: linear-gradient(180deg,#4285F4 0%,#EA4335 33%,#FBBC05 66%,#34A853 100%); border-radius: 2px; flex-shrink: 0; }
+.logo-name { font-size: 13px; font-weight: 600; color: #e8e8ed; letter-spacing: -0.01em; }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 400; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-cta { background: var(--blue); color: #fff !important; padding: 9px 20px; border-radius: 8px; font-weight: 500 !important; font-size: 13px !important; transition: opacity 0.2s !important; }
+.nav-cta:hover { opacity: 0.85 !important; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
 .nav-back {
   background: transparent;
   border: 1px solid var(--border);
@@ -77,6 +67,14 @@ nav {
   font-family: 'Poppins', sans-serif;
 }
 .nav-back:hover { border-color: rgba(255,255,255,0.2); }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.nav-hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: rgba(13,13,15,0.98); padding: 20px; border-bottom: 1px solid var(--border); gap: 16px; }
+}
 
 /* ── CONTAINER ── */
 .container {
@@ -471,12 +469,22 @@ nav {
 
 <!-- ══ NAVBAR ══ -->
 <nav>
-  <a href="#" class="logo" onclick="goHome(); return false;">
-    <span><span class="g">G</span><span class="d">D</span><span class="s">S</span></span>
+  <a href="index.html" class="logo-inline">
+    <div class="logo-letters"><span class="l-g">G</span><span class="l-d">D</span><span class="l-s">S</span></div>
     <div class="logo-sep"></div>
-    <span class="logo-text">Giussani Data Solutions</span>
+    <span class="logo-name">Giussani Data Solutions</span>
   </a>
-  <button class="nav-back hidden" onclick="goBack()">← Indietro</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="percorsi.html" class="active">Percorsi</a></li>
+    <li><a href="strumenti.html">Strumenti</a></li>
+    <li><a href="guide.html">Guide</a></li>
+    <li><a href="servizi.html">Servizi</a></li>
+    <li><a href="index.html#contatti" class="nav-cta">Consulenza gratuita</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-back hidden" id="nav-back" onclick="goBack()">← Indietro</button>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
 <div class="container">
@@ -1585,6 +1593,11 @@ nav {
 </div>
 
 <script>
+// ── MOBILE MENU ──
+function toggleMenu() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+
 // ── STATE MANAGEMENT ──
 let currentFlow = null;
 let currentStep = 1;
@@ -2397,6 +2410,15 @@ nextStep = function(flow, step) {
   }
   originalNextStep(flow, step);
 };
+
+// ── AUTO-START FROM URL PARAM ──
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const flow = params.get('flow');
+  if (flow && ['idea', 'verify', 'structure', 'finance'].includes(flow)) {
+    startFlow(flow);
+  }
+})();
 </script>
 
 </body>
