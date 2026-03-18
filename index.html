@@ -113,6 +113,32 @@
   .contact-chip:hover { border-color: rgba(255,255,255,0.15); }
   .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
+  /* — CONTACT FORM — */
+  .contact-form {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 32px; text-align: left; margin-top: 32px;
+  }
+  .form-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+  .form-group label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+  .form-group input,
+  .form-group textarea {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 10px; padding: 11px 14px; color: var(--text);
+    font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--blue); }
+  .form-group textarea { min-height: 96px; resize: vertical; }
+  .form-hp { display: none !important; visibility: hidden !important; }
+  .form-submit-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 20px; }
+  .form-note { font-size: 12px; color: var(--muted); }
+  #form-success {
+    display: none; margin-top: 16px; padding: 14px 18px;
+    background: rgba(52,168,83,0.12); border: 1px solid rgba(52,168,83,0.3);
+    border-radius: 12px; color: #34c759; font-size: 14px; text-align: center;
+  }
+
   /* — CANVAS MESH — */
   #mesh-bg {
     position: fixed; inset: 0; z-index: 1;
@@ -279,18 +305,45 @@
 
     <!-- CTA CONTATTI -->
     <section id="contatti" class="cta-section">
-      <div class="cta-inner">
+      <div class="cta-inner" style="max-width:640px;">
         <p class="s-tag" style="text-align:center; margin-bottom:14px;">Contattaci</p>
         <h2 class="cta-title">Prima consulenza<br><span class="acc-g">completamente gratuita</span></h2>
-        <p class="cta-sub">Chiamaci, scrivici o vieni in studio. I nostri professionisti sono a tua disposizione per analizzare la tua situazione e proporti la soluzione più adatta.</p>
+        <p class="cta-sub">Chiamaci o scrivici. I nostri professionisti sono a tua disposizione per analizzare la tua situazione e proporti la soluzione più adatta.</p>
         <div class="cta-chips">
           <a href="tel:0382426597" class="contact-chip"><span>📞</span> 0382-426597</a>
-          <a href="mailto:studio@gdatasolutions.it" class="contact-chip"><span>✉️</span> studio@gdatasolutions.it</a>
+          <span class="contact-chip"><span>✉️</span> <span id="email-chip"></span></span>
         </div>
-        <div class="cta-actions">
-          <a href="mailto:studio@gdatasolutions.it" class="btn-primary">Scrivici ora →</a>
-          <a href="tel:0382426597" class="btn-ghost">Chiamaci</a>
-        </div>
+
+        <!-- Form protetto con honeypot – nessuna email esposta nel codice -->
+        <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+          <input type="hidden" name="subject" value="Nuova richiesta consulenza – GDS">
+          <input type="hidden" name="from_name" value="Sito GDS">
+          <input type="hidden" name="redirect" value="false">
+          <!-- Honeypot: i bot lo riempiono, gli umani no -->
+          <input type="text" name="botcheck" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cf-name">Nome e cognome *</label>
+              <input type="text" id="cf-name" name="name" required placeholder="Mario Rossi" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="cf-email">La tua email *</label>
+              <input type="email" id="cf-email" name="email" required placeholder="mario@esempio.it" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:14px;">
+            <label for="cf-msg">Come possiamo aiutarti?</label>
+            <textarea id="cf-msg" name="message" placeholder="Descrivi brevemente la tua situazione o domanda..."></textarea>
+          </div>
+          <div class="form-submit-row">
+            <button type="submit" class="btn-primary" id="cf-submit">Invia richiesta →</button>
+            <a href="tel:0382426597" class="btn-ghost">📞 Chiamaci</a>
+            <span class="form-note">Risposta entro 24h · Nessun impegno</span>
+          </div>
+          <div id="form-success">✓ Messaggio inviato! Ti risponderemo entro 24 ore.</div>
+        </form>
       </div>
     </section>
 
@@ -315,7 +368,7 @@
       <div class="footer-col">
         <span class="footer-col-title">Contatti</span>
         <a href="tel:0382426597">0382-426597</a>
-        <a href="mailto:studio@gdatasolutions.it">studio@gdatasolutions.it</a>
+        <a href="#" id="footer-email">studio&#64;gdatasolutions.it</a>
       </div>
       <div class="footer-col">
         <span class="footer-col-title">Navigazione</span>
@@ -385,6 +438,54 @@
       { threshold: 0.25 }
     );
     hideObs.observe(ctaSection);
+  })();
+
+  /* — EMAIL OBFUSCATION — */
+  (function () {
+    var parts = ['studio', '@', 'gdatasolutions', '.', 'it'];
+    var addr = parts.join('');
+    var chip = document.getElementById('email-chip');
+    if (chip) {
+      var a = document.createElement('a');
+      a.href = 'mailto:' + addr;
+      a.textContent = addr;
+      a.style.color = 'inherit';
+      a.style.textDecoration = 'none';
+      chip.appendChild(a);
+    }
+    var footerEmail = document.getElementById('footer-email');
+    if (footerEmail) {
+      footerEmail.href = 'mailto:' + addr;
+      footerEmail.textContent = addr;
+    }
+  })();
+
+  /* — CONTACT FORM (Web3Forms) — */
+  (function () {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('cf-submit');
+      btn.textContent = 'Invio in corso…';
+      btn.disabled = true;
+      try {
+        var res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(form) });
+        var json = await res.json();
+        if (json.success) {
+          document.getElementById('form-success').style.display = 'block';
+          form.reset();
+        } else {
+          btn.textContent = 'Errore, riprova';
+        }
+      } catch (_) {
+        btn.textContent = 'Errore di rete, riprova';
+      }
+      btn.disabled = false;
+      if (document.getElementById('form-success').style.display === 'block') {
+        btn.textContent = 'Invia richiesta →';
+      }
+    });
   })();
   </script>
 
