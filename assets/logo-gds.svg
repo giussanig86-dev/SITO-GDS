@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" width="320" height="64" role="img" aria-label="GDS – Giussani Data Solutions">
+
+  <defs>
+    <!-- Gradiente separatore verticale (colori Google) -->
+    <linearGradient id="sep-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#4285F4"/>
+      <stop offset="33%"  stop-color="#EA4335"/>
+      <stop offset="66%"  stop-color="#FBBC05"/>
+      <stop offset="100%" stop-color="#34A853"/>
+    </linearGradient>
+
+    <!-- Font Poppins da Google Fonts -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Sfondo scuro (colore sito: #0d0d0f) -->
+  <rect width="320" height="64" fill="#0d0d0f" rx="12"/>
+
+  <!-- ── LETTERE G D S ── -->
+  <text x="20"  y="42" font-family="'Poppins', sans-serif" font-weight="800" font-size="30" fill="#4285F4">G</text>
+  <text x="40"  y="42" font-family="'Poppins', sans-serif" font-weight="800" font-size="30" fill="#EA4335">D</text>
+  <text x="60"  y="42" font-family="'Poppins', sans-serif" font-weight="800" font-size="30" fill="#34A853">S</text>
+
+  <!-- ── SEPARATORE VERTICALE ── -->
+  <rect x="94" y="12" width="1.5" height="30" rx="1" fill="url(#sep-grad)"/>
+
+  <!-- ── NOME COMPLETO ── -->
+  <text x="108" y="35" font-family="'Poppins', sans-serif" font-weight="600" font-size="13" fill="#e8e8ed" letter-spacing="-0.01em">Giussani Data Solutions</text>
+
+</svg>

@@ -102,11 +102,57 @@
     position: fixed; inset: 0; z-index: 1;
     pointer-events: none; opacity: 0; transition: opacity 1.2s ease;
   }
+
+  /* — ICON ANIMATIONS — */
+  @keyframes icon-bulb {
+    0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 0 rgba(251,188,5,0)); }
+    50%       { transform: scale(1.22) rotate(-8deg); filter: drop-shadow(0 0 14px rgba(251,188,5,0.85)); }
+  }
+  @keyframes icon-search {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25%       { transform: translateX(-6px) rotate(-12deg); }
+    75%       { transform: translateX(6px) rotate(12deg); }
+  }
+  @keyframes icon-temple {
+    0%, 100% { transform: translateY(0) scale(1); }
+    40%       { transform: translateY(-9px) scale(1.07); }
+    65%       { transform: translateY(-6px) scale(1.04); }
+  }
+  @keyframes icon-bag {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    20%       { transform: rotate(-11deg) scale(1.14); }
+    40%       { transform: rotate(11deg) scale(1.14); }
+    60%       { transform: rotate(-6deg) scale(1.07); }
+    80%       { transform: rotate(6deg) scale(1.07); }
+  }
+
+  .card-idea:hover .path-icon      { animation: icon-bulb   1.4s ease-in-out infinite; }
+  .card-verify:hover .path-icon    { animation: icon-search 0.75s ease-in-out infinite; }
+  .card-structure:hover .path-icon { animation: icon-temple 1.2s  ease-in-out infinite; }
+  .card-finance:hover .path-icon   { animation: icon-bag    0.6s  ease-in-out infinite; }
+
+  /* — FLOATING CTA — */
+  .float-cta {
+    position: fixed; top: 82px; right: 20px; z-index: 99;
+    background: var(--blue); color: #fff; text-decoration: none;
+    padding: 10px 22px; border-radius: 10px;
+    font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 24px rgba(66,133,244,0.45);
+    transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.2s;
+    opacity: 0; pointer-events: none; transform: translateY(-10px);
+    white-space: nowrap;
+  }
+  .float-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .float-cta:hover   { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(66,133,244,0.6); }
+  @media (max-width: 900px) { .float-cta { display: none; } }
   </style>
 </head>
 <body>
 
   <canvas id="mesh-bg"></canvas>
+
+  <!-- == FLOATING CTA == -->
+  <a href="#contatti" class="float-cta" id="float-cta">Prima consulenza gratuita →</a>
 
   <!-- == NAVBAR == -->
   <nav>
@@ -167,25 +213,25 @@
         <h2 class="s-title">Scegli il percorso più adatto<br>alla tua situazione</h2>
         <p class="s-sub">Ti guidiamo passo dopo passo: dalla validazione dell'idea alla verifica dei requisiti startup, fino alla scelta della struttura giuridica e al finanziamento.</p>
         <div class="path-grid">
-          <a class="path-card" href="percorsi.html?flow=idea">
+          <a class="path-card card-idea" href="percorsi.html?flow=idea">
             <div class="path-icon">💡</div>
             <h3 class="path-title">Ho un'idea</h3>
             <p class="path-desc">Non ho ancora un'impresa ma voglio capire come trasformare la mia idea in un business concreto.</p>
             <div class="path-arrow">›</div>
           </a>
-          <a class="path-card" href="percorsi.html?flow=verify">
+          <a class="path-card card-verify" href="percorsi.html?flow=verify">
             <div class="path-icon">🔍</div>
             <h3 class="path-title">Ho sentito parlare di Startup Innovativa</h3>
             <p class="path-desc">Voglio verificare se ho i requisiti per diventare startup innovativa e accedere alle agevolazioni della legge 221/2012.</p>
             <div class="path-arrow">›</div>
           </a>
-          <a class="path-card" href="percorsi.html?flow=structure">
+          <a class="path-card card-structure" href="percorsi.html?flow=structure">
             <div class="path-icon">🏛</div>
             <h3 class="path-title">Voglio scegliere la struttura giusta</h3>
             <p class="path-desc">Devo capire quale forma societaria è più adatta al mio progetto: ditta individuale, SNC, SRL o SRLS.</p>
             <div class="path-arrow">›</div>
           </a>
-          <a class="path-card" href="percorsi.html?flow=finance">
+          <a class="path-card card-finance" href="percorsi.html?flow=finance">
             <div class="path-icon">💰</div>
             <h3 class="path-title">Voglio trovare finanziamenti per il mio progetto</h3>
             <p class="path-desc">Voglio scoprire le opzioni di finanziamento disponibili: crowdfunding, bandi, agevolazioni fiscali e credito.</p>
@@ -290,6 +336,26 @@
   function toggleMenu() {
     document.getElementById('nav-links').classList.toggle('open');
   }
+
+  /* — FLOATING CTA: appare quando il bottone hero è fuori vista — */
+  (function () {
+    const floatBtn   = document.getElementById('float-cta');
+    const heroBtn    = document.querySelector('.hero-actions');
+    const ctaSection = document.getElementById('contatti');
+
+    const showObs = new IntersectionObserver(
+      ([e]) => floatBtn.classList.toggle('visible', !e.isIntersecting),
+      { threshold: 0 }
+    );
+    showObs.observe(heroBtn);
+
+    /* si nasconde quando si arriva alla sezione contatti */
+    const hideObs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) floatBtn.classList.remove('visible'); },
+      { threshold: 0.25 }
+    );
+    hideObs.observe(ctaSection);
+  })();
   </script>
 </body>
 </html>
