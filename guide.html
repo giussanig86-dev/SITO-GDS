@@ -257,7 +257,7 @@
       <div class="footer-col">
         <span class="footer-col-title">Contatti</span>
         <a href="tel:0382426597">0382-426597</a>
-        <a href="mailto:studio@gdatasolutions.it">studio@gdatasolutions.it</a>
+        <a href="#" id="footer-email">studio&#64;gdatasolutions.it</a>
       </div>
       <div class="footer-col">
         <span class="footer-col-title">Navigazione</span>
@@ -278,6 +278,12 @@
   function toggleMenu() {
     document.getElementById('nav-links').classList.toggle('open');
   }
+  (function () {
+    var parts = ['studio', '@', 'gdatasolutions', '.', 'it'];
+    var addr = parts.join('');
+    var footerEmail = document.getElementById('footer-email');
+    if (footerEmail) { footerEmail.href = 'mailto:' + addr; footerEmail.textContent = addr; }
+  })();
   function subscribeNewsletter(e) {
     e.preventDefault();
     const email = e.target.querySelector('input').value;

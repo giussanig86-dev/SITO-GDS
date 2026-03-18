@@ -96,6 +96,10 @@
 
     document.head.appendChild(style);
     document.body.appendChild(el);
+    // Sposta il footer sopra il banner aggiungendo padding al body
+    requestAnimationFrame(function () {
+      document.body.style.paddingBottom = getBannerHeight() + 'px';
+    });
 
     document.getElementById('gcb-accept').addEventListener('click', function () {
       setCookie(COOKIE_KEY, 'all', COOKIE_DAYS);
@@ -109,9 +113,17 @@
     });
   }
 
+  function getBannerHeight() {
+    var el = document.getElementById('gds-cookie-banner');
+    return el ? el.offsetHeight : 0;
+  }
+
   function removeBanner() {
     var el = document.getElementById('gds-cookie-banner');
-    if (el) el.remove();
+    if (el) {
+      el.remove();
+      document.body.style.paddingBottom = '';
+    }
   }
 
   // ── API pubblica (per pulsante "Gestisci" nella cookie policy) ───

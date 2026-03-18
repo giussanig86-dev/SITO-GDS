@@ -206,8 +206,9 @@ footer {
   flex-wrap: wrap; gap: 12px; position: relative; z-index: 1;
 }
 .footer-bottom span, .footer-bottom a {
-  font-size: 11px; color: #333; font-weight: 300; text-decoration: none;
+  font-size: 11px; color: var(--muted); font-weight: 300; text-decoration: none;
 }
+.footer-bottom a:hover { color: var(--text); }
 
 /* — ANIMATIONS — */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
