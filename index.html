@@ -126,10 +126,13 @@
     80%       { transform: rotate(6deg) scale(1.07); }
   }
 
-  .card-idea:hover .path-icon      { animation: icon-bulb   1.4s ease-in-out infinite; }
-  .card-verify:hover .path-icon    { animation: icon-search 0.75s ease-in-out infinite; }
-  .card-structure:hover .path-icon { animation: icon-temple 1.2s  ease-in-out infinite; }
-  .card-finance:hover .path-icon   { animation: icon-bag    0.6s  ease-in-out infinite; }
+  /* animazioni sempre attive, sfasate per non sincronizzarsi */
+  .card-idea .path-icon      { animation: icon-bulb   2.8s ease-in-out infinite; }
+  .card-verify .path-icon    { animation: icon-search 2s   ease-in-out infinite 0.5s; }
+  .card-structure .path-icon { animation: icon-temple 3s   ease-in-out infinite 1s; }
+  .card-finance .path-icon   { animation: icon-bag    1.6s ease-in-out infinite 0.8s; }
+  /* pausa al click */
+  .path-card.clicked .path-icon { animation-play-state: paused; }
 
   /* — FLOATING CTA — */
   .float-cta {
@@ -144,7 +147,18 @@
   }
   .float-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
   .float-cta:hover   { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(66,133,244,0.6); }
-  @media (max-width: 900px) { .float-cta { display: none; } }
+
+  /* mobile: banner fisso in basso, full-width */
+  @media (max-width: 900px) {
+    .float-cta {
+      top: auto; bottom: 0; left: 0; right: 0;
+      border-radius: 0; text-align: center;
+      padding: 15px 20px; font-size: 14px;
+      transform: translateY(100%);
+    }
+    .float-cta.visible { transform: translateY(0); }
+    .float-cta:hover   { transform: translateY(0); }
+  }
   </style>
 </head>
 <body>
@@ -336,6 +350,11 @@
   function toggleMenu() {
     document.getElementById('nav-links').classList.toggle('open');
   }
+
+  /* — PAUSA ANIMAZIONI ICONE AL CLICK — */
+  document.querySelectorAll('.path-card').forEach(card => {
+    card.addEventListener('click', () => card.classList.add('clicked'));
+  });
 
   /* — FLOATING CTA: appare quando il bottone hero è fuori vista — */
   (function () {
