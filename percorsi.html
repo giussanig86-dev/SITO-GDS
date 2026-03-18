@@ -166,17 +166,19 @@ nav {
   line-height: 1;
   filter: grayscale(0.3);
   display: inline-block;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
-.path-card:hover .path-icon { animation-duration: 1.2s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
 
 /* 💡 lampadina */
-.path-card:nth-child(1):hover .path-icon { animation-name: bulb-glow; }
+.path-card:nth-child(1) .path-icon { animation-name: bulb-glow; }
 /* 🏢 palazzo */
-.path-card:nth-child(2):hover .path-icon { animation-name: building-pulse; }
+.path-card:nth-child(2) .path-icon { animation-name: building-pulse; }
 /* ⚖️ bilancia */
-.path-card:nth-child(3):hover .path-icon { animation-name: scale-balance; }
+.path-card:nth-child(3) .path-icon { animation-name: scale-balance; }
 /* 💰 sacco soldi */
-.path-card:nth-child(4):hover .path-icon { animation-name: money-bounce; }
+.path-card:nth-child(4) .path-icon { animation-name: money-bounce; }
 
 .path-title {
   font-size: 18px;
