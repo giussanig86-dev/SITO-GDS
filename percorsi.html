@@ -228,6 +228,13 @@ nav {
   margin-top: 40px;
 }
 
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(66,133,244,0.45); transform: scale(1); }
+  50%       { box-shadow: 0 6px 32px rgba(66,133,244,0.75); transform: scale(1.04); }
+}
+.btn-start { animation: btn-pulse 2s ease-in-out infinite; }
+.btn-start:hover { animation-play-state: paused; }
+
 .btn-primary {
   background: var(--blue);
   color: #fff;
@@ -475,11 +482,11 @@ nav {
     <span class="logo-name">Giussani Data Solutions</span>
   </a>
   <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">← Home</a></li>
     <li><a href="percorsi.html" class="active">Percorsi</a></li>
     <li><a href="strumenti.html">Strumenti</a></li>
     <li><a href="guide.html">Guide</a></li>
     <li><a href="servizi.html">Servizi</a></li>
-    <li><a href="index.html#contatti" class="nav-cta">Consulenza gratuita</a></li>
   </ul>
   <div class="nav-right">
     <button class="nav-back hidden" id="nav-back" onclick="goBack()">← Indietro</button>
@@ -561,7 +568,7 @@ nav {
           Trasformare un'idea in impresa richiede strategia, struttura e competenza. GDS ti accompagna in ogni fase: dalla validazione dell'idea al business plan, fino alla costituzione formale.
         </p>
         <div class="section-actions">
-          <button class="btn-primary" onclick="nextStep('idea', 2)">Iniziamo →</button>
+          <button class="btn-primary btn-start" onclick="nextStep('idea', 2)">Iniziamo →</button>
         </div>
       </div>
     </div>
@@ -836,7 +843,7 @@ nav {
           Le startup innovative godono di numerosi vantaggi: esenzione da bollo e diritti camerali, disciplina del lavoro flessibile, equity crowdfunding, facilitazioni per l'accesso al credito e incentivi fiscali. Verifichiamo insieme se hai i requisiti.
         </p>
         <div class="section-actions">
-          <button class="btn-primary" onclick="nextStep('verify', 2)">Inizia la verifica →</button>
+          <button class="btn-primary btn-start" onclick="nextStep('verify', 2)">Inizia la verifica →</button>
         </div>
       </div>
     </div>
@@ -1117,7 +1124,7 @@ nav {
           La scelta della forma giuridica impatta su responsabilità patrimoniale, tassazione, costi di gestione e flessibilità operativa. Ti guidiamo verso la soluzione più adatta al tuo progetto.
         </p>
         <div class="section-actions">
-          <button class="btn-primary" onclick="nextStep('structure', 2)">Iniziamo →</button>
+          <button class="btn-primary btn-start" onclick="nextStep('structure', 2)">Iniziamo →</button>
         </div>
       </div>
     </div>
@@ -1322,7 +1329,7 @@ nav {
           Esistono molte opzioni per raccogliere capitale: crowdfunding, bandi regionali, agevolazioni fiscali, credito bancario agevolato e incentivi all'investimento. Troviamo insieme la strada migliore.
         </p>
         <div class="section-actions">
-          <button class="btn-primary" onclick="nextStep('finance', 2)">Esploriamo le opzioni →</button>
+          <button class="btn-primary btn-start" onclick="nextStep('finance', 2)">Esploriamo le opzioni →</button>
         </div>
       </div>
     </div>
