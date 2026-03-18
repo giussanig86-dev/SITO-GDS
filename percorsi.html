@@ -134,11 +134,49 @@ nav {
   box-shadow: 0 16px 48px rgba(0,0,0,0.3);
 }
 
+/* ── KEYFRAMES ICONE ── */
+@keyframes rocket-fly {
+  0%   { transform: translateY(0) rotate(-5deg); }
+  30%  { transform: translateY(-12px) rotate(5deg); }
+  60%  { transform: translateY(-6px) rotate(-3deg); }
+  100% { transform: translateY(0) rotate(-5deg); }
+}
+@keyframes building-pulse {
+  0%,100% { transform: scale(1); filter: grayscale(0.3) drop-shadow(0 0 0px #4285F4); }
+  50%     { transform: scale(1.12); filter: grayscale(0) drop-shadow(0 0 12px #4285F455); }
+}
+@keyframes scale-balance {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(-8deg); }
+  75%     { transform: rotate(8deg); }
+}
+@keyframes bulb-glow {
+  0%,100% { filter: grayscale(0.3) drop-shadow(0 0 0px #FBBC05); }
+  50%     { filter: grayscale(0) drop-shadow(0 0 14px #FBBC0588); transform: scale(1.1); }
+}
+@keyframes money-bounce {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  20%     { transform: translateY(-10px) rotate(-5deg); }
+  50%     { transform: translateY(-14px) rotate(4deg); }
+  80%     { transform: translateY(-6px) rotate(-2deg); }
+}
+
 .path-icon {
   font-size: 56px;
   line-height: 1;
   filter: grayscale(0.3);
+  display: inline-block;
 }
+.path-card:hover .path-icon { animation-duration: 1.2s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+
+/* 💡 lampadina */
+.path-card:nth-child(1):hover .path-icon { animation-name: bulb-glow; }
+/* 🏢 palazzo */
+.path-card:nth-child(2):hover .path-icon { animation-name: building-pulse; }
+/* ⚖️ bilancia */
+.path-card:nth-child(3):hover .path-icon { animation-name: scale-balance; }
+/* 💰 sacco soldi */
+.path-card:nth-child(4):hover .path-icon { animation-name: money-bounce; }
 
 .path-title {
   font-size: 18px;
@@ -201,7 +239,21 @@ nav {
   font-size: 72px;
   margin-bottom: 28px;
   filter: grayscale(0.2);
+  display: inline-block;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
+/* 🚀 razzo */
+.section-icon.anim-rocket   { animation-name: rocket-fly; }
+/* 🏢 palazzo / 🏦 banca */
+.section-icon.anim-building { animation-name: building-pulse; }
+/* ⚖️ bilancia */
+.section-icon.anim-scale    { animation-name: scale-balance; }
+/* 💡 lampadina */
+.section-icon.anim-bulb     { animation-name: bulb-glow; }
+/* 💰 soldi */
+.section-icon.anim-money    { animation-name: money-bounce; }
 
 .section-title {
   font-size: clamp(24px, 4vw, 36px);
@@ -562,7 +614,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🚀</div>
+        <div class="section-icon anim-rocket">🚀</div>
         <h2 class="section-title">Da dove iniziamo?<br>La tua idea</h2>
         <p class="section-text">
           Trasformare un'idea in impresa richiede strategia, struttura e competenza. GDS ti accompagna in ogni fase: dalla validazione dell'idea al business plan, fino alla costituzione formale.
@@ -747,7 +799,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💰</div>
+        <div class="section-icon anim-money">💰</div>
         <h2 class="section-title">Come intendi finanziare<br>il progetto?</h2>
         <p class="section-text">
           Puoi selezionare più opzioni. Questo ci aiuta a suggerirti gli strumenti più adatti.
@@ -837,7 +889,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🚀</div>
+        <div class="section-icon anim-rocket">🚀</div>
         <h2 class="section-title">Verifica requisiti<br>Startup Innovativa</h2>
         <p class="section-text">
           Le startup innovative godono di numerosi vantaggi: esenzione da bollo e diritti camerali, disciplina del lavoro flessibile, equity crowdfunding, facilitazioni per l'accesso al credito e incentivi fiscali. Verifichiamo insieme se hai i requisiti.
@@ -1010,7 +1062,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💡</div>
+        <div class="section-icon anim-bulb">💡</div>
         <h2 class="section-title">Oggetto sociale innovativo</h2>
         <p class="section-text">
           L'oggetto sociale esclusivo o prevalente deve essere lo sviluppo, la produzione e la commercializzazione di prodotti o servizi innovativi ad alto valore tecnologico. Non deve svolgere attività prevalente di agenzia o consulenza.
@@ -1118,7 +1170,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">⚖️</div>
+        <div class="section-icon anim-scale">⚖️</div>
         <h2 class="section-title">Quale struttura giuridica?</h2>
         <p class="section-text">
           La scelta della forma giuridica impatta su responsabilità patrimoniale, tassazione, costi di gestione e flessibilità operativa. Ti guidiamo verso la soluzione più adatta al tuo progetto.
@@ -1197,7 +1249,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💰</div>
+        <div class="section-icon anim-money">💰</div>
         <h2 class="section-title">Capitale iniziale disponibile</h2>
         <p class="section-text">
           Alcune forme societarie richiedono un capitale sociale minimo. Per le SRL serve almeno 1€ (SRLS) o importi superiori per SRL ordinarie.
@@ -1224,7 +1276,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🚀</div>
+        <div class="section-icon anim-rocket">🚀</div>
         <h2 class="section-title">Ambizioni di crescita</h2>
         <p class="section-text">
           Pensi di cercare investitori esterni, quotarti in borsa o scalare rapidamente?
@@ -1323,7 +1375,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💰</div>
+        <div class="section-icon anim-money">💰</div>
         <h2 class="section-title">Come finanziare<br>la tua impresa</h2>
         <p class="section-text">
           Esistono molte opzioni per raccogliere capitale: crowdfunding, bandi regionali, agevolazioni fiscali, credito bancario agevolato e incentivi all'investimento. Troviamo insieme la strada migliore.
@@ -1413,7 +1465,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🏢</div>
+        <div class="section-icon anim-building">🏢</div>
         <h2 class="section-title">Sei già una società di capitali?</h2>
         <p class="section-text">
           Alcuni strumenti di finanziamento (equity crowdfunding, investitori) sono accessibili solo a SRL/SPA.
@@ -1443,7 +1495,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🚀</div>
+        <div class="section-icon anim-rocket">🚀</div>
         <h2 class="section-title">Hai requisiti startup innovativa?</h2>
         <p class="section-text">
           Le startup innovative accedono a canali esclusivi come equity crowdfunding e agevolazioni fiscali potenziate.
@@ -1560,7 +1612,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💡</div>
+        <div class="section-icon anim-bulb">💡</div>
         <h2 class="section-title">Le tue opzioni personalizzate</h2>
         
         <!-- Dynamic report content -->
