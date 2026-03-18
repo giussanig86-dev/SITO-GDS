@@ -135,38 +135,35 @@
   .path-card.clicked .path-icon { animation-play-state: paused; }
 
   /* — FLOATING CTA — */
-  .float-cta {
-    position: fixed; top: 82px; right: 20px; z-index: 99;
-    background: var(--blue); color: #fff; text-decoration: none;
-    padding: 10px 22px; border-radius: 10px;
-    font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
-    box-shadow: 0 4px 24px rgba(66,133,244,0.45);
-    transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.2s;
-    opacity: 0; pointer-events: none; transform: translateY(-10px);
-    white-space: nowrap;
-  }
-  .float-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-  .float-cta:hover   { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(66,133,244,0.6); }
-
-  /* mobile: banner fisso in basso, full-width con testo pulsante */
   @keyframes pulse-text {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.55; }
+    0%, 100% { opacity: 1; transform: translateY(0) scale(1); }
+    50%       { opacity: 0.7; transform: translateY(0) scale(1.04); }
   }
+
+  /* desktop: sempre visibile, grande, pulsante */
+  .float-cta {
+    position: fixed; top: 82px; right: 24px; z-index: 99;
+    background: var(--blue); color: #fff; text-decoration: none;
+    padding: 16px 34px; border-radius: 14px;
+    font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700;
+    box-shadow: 0 6px 32px rgba(66,133,244,0.55);
+    white-space: nowrap; letter-spacing: 0.01em;
+    animation: pulse-text 2.2s ease-in-out infinite;
+    transition: box-shadow 0.2s;
+  }
+  .float-cta:hover {
+    box-shadow: 0 10px 40px rgba(66,133,244,0.75);
+    animation-play-state: paused;
+  }
+
+  /* mobile: banner fisso in basso, full-width */
   @media (max-width: 900px) {
     .float-cta {
       top: auto; bottom: 0; left: 0; right: 0;
       border-radius: 0; text-align: center;
-      padding: 16px 20px; font-size: 15px;
-      transform: translateY(100%);
-      /* sempre visibile su mobile, senza IntersectionObserver */
-      opacity: 1 !important; pointer-events: auto !important;
-      transform: translateY(0) !important;
-      animation: pulse-text 2s ease-in-out infinite;
+      padding: 17px 20px; font-size: 15px;
     }
-    .float-cta:hover { transform: translateY(0) !important; }
-    /* nasconde il bottone hero su mobile */
-    .hero-actions { display: none; }
+    .float-cta:hover { box-shadow: 0 6px 32px rgba(66,133,244,0.55); }
   }
   </style>
 </head>
@@ -189,7 +186,6 @@
       <li><a href="strumenti.html">Strumenti</a></li>
       <li><a href="guide.html">Guide</a></li>
       <li><a href="servizi.html">Servizi</a></li>
-      <li><a href="#contatti" class="nav-cta">Consulenza gratuita</a></li>
     </ul>
     <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
       <span></span><span></span><span></span>
@@ -215,7 +211,6 @@
         </h1>
         <p class="hero-sub">GDS è una società di consulenza contabile e tributaria. Affianchiamo professionisti e imprese in ogni fase del loro percorso, dalla costituzione alla crescita.</p>
         <div class="hero-actions">
-          <a href="#contatti" class="btn-primary">Prima consulenza gratuita →</a>
           <a href="percorsi.html" class="btn-ghost">Scopri i percorsi</a>
         </div>
         <div class="hero-stats">
@@ -365,21 +360,12 @@
     card.addEventListener('click', () => card.classList.add('clicked'));
   });
 
-  /* — FLOATING CTA: appare quando il bottone hero è fuori vista — */
+  /* — FLOATING CTA: nasconde quando la sezione contatti è visibile — */
   (function () {
     const floatBtn   = document.getElementById('float-cta');
-    const heroBtn    = document.querySelector('.hero-actions');
     const ctaSection = document.getElementById('contatti');
-
-    const showObs = new IntersectionObserver(
-      ([e]) => floatBtn.classList.toggle('visible', !e.isIntersecting),
-      { threshold: 0 }
-    );
-    showObs.observe(heroBtn);
-
-    /* si nasconde quando si arriva alla sezione contatti */
     const hideObs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) floatBtn.classList.remove('visible'); },
+      ([e]) => { floatBtn.style.opacity = e.isIntersecting ? '0' : ''; floatBtn.style.pointerEvents = e.isIntersecting ? 'none' : ''; },
       { threshold: 0.25 }
     );
     hideObs.observe(ctaSection);
