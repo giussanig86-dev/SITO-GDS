@@ -101,6 +101,23 @@
       document.body.style.paddingBottom = getBannerHeight() + 'px';
     });
 
+    // Nasconde il banner quando si raggiunge il fondo pagina
+    function onScroll() {
+      var banner = document.getElementById('gds-cookie-banner');
+      if (!banner) return;
+      var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 40);
+      if (atBottom) {
+        banner.style.transform = 'translateY(100%)';
+        banner.style.transition = 'transform 0.3s ease';
+        document.body.style.paddingBottom = '';
+      } else {
+        banner.style.transform = '';
+        document.body.style.paddingBottom = getBannerHeight() + 'px';
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    el._scrollHandler = onScroll;
+
     document.getElementById('gcb-accept').addEventListener('click', function () {
       setCookie(COOKIE_KEY, 'all', COOKIE_DAYS);
       loadAnalytics();
@@ -121,6 +138,7 @@
   function removeBanner() {
     var el = document.getElementById('gds-cookie-banner');
     if (el) {
+      if (el._scrollHandler) window.removeEventListener('scroll', el._scrollHandler);
       el.remove();
       document.body.style.paddingBottom = '';
     }
