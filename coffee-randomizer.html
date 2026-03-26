@@ -259,6 +259,26 @@
     .mt-16 { margin-top: 16px; }
     .export-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #7a2020;
+      color: #f57e7e;
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover { background: #4a1a1a; }
+
+    .preview-count {
+      font-size: 0.8rem;
+      color: #c4956a;
+      margin-top: 10px;
+    }
+
     .hidden { display: none !important; }
 
     /* ── RESPONSIVE ─────────────────────────────────── */
@@ -333,6 +353,7 @@
         <table id="preview-table"></table>
       </div>
     </div>
+    <div id="preview-count" class="preview-count hidden"></div>
   </div>
 
   <!-- ── STEP 3: BUDGET ────────────────────────────────── -->
@@ -606,19 +627,49 @@ function confermaColonne() {
     return;
   }
 
-  // Render preview
-  const tbl = document.getElementById('preview-table');
-  tbl.innerHTML = `
-    <thead><tr><th>Giorno / Data</th><th>Spesa minima (€)</th></tr></thead>
-    <tbody>
-      ${giorni.map(r =>
-        `<tr><td>${escHtml(r.giorno)}</td><td>€ ${r.minimo.toFixed(2)}</td></tr>`
-      ).join('')}
-    </tbody>`;
-
+  renderPreview();
   showEl('preview-wrap');
   showEl('card-budget');
   document.getElementById('card-budget').scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderPreview() {
+  const tbl = document.getElementById('preview-table');
+  tbl.innerHTML = `
+    <thead>
+      <tr>
+        <th>Giorno / Data</th>
+        <th style="text-align:right">Spesa minima (€)</th>
+        <th style="text-align:center">Elimina</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${giorni.map((r, i) => `
+        <tr id="pr-row-${i}">
+          <td>${escHtml(r.giorno)}</td>
+          <td style="text-align:right">€ ${r.minimo.toFixed(2)}</td>
+          <td style="text-align:center">
+            <button class="btn-delete" onclick="eliminaRiga(${i})" title="Elimina riga">×</button>
+          </td>
+        </tr>`).join('')}
+    </tbody>`;
+
+  const countEl = document.getElementById('preview-count');
+  countEl.textContent = `${giorni.length} giorni selezionati`;
+  showEl('preview-count');
+}
+
+function eliminaRiga(index) {
+  giorni.splice(index, 1);
+  if (!giorni.length) {
+    hideEl('preview-wrap');
+    hideEl('preview-count');
+    hideEl('card-budget');
+    hideEl('card-results');
+    setAlert('import-alert', 'warning', 'Tutti i giorni sono stati eliminati. Ricarica il file.');
+    return;
+  }
+  renderPreview();
 }
 
 // ── Distribution algorithm ─────────────────────────────────
