@@ -758,25 +758,13 @@ function genera() {
 function esportaExcel() {
   if (!risultati.length) return;
 
-  const sumMin = risultati.reduce((s, r) => s + r.minimo, 0);
-  const sumAss = risultati.reduce((s, r) => s + r.assegnato, 0);
-
   const rows = risultati.map(r => ({
-    'Giorno / Data':        r.giorno,
-    'Spesa Minima (€)':     +r.minimo.toFixed(2),
-    'Budget Assegnato (€)': +r.assegnato.toFixed(2),
-    'Surplus Giorno (€)':   +(r.assegnato - r.minimo).toFixed(2)
+    'Data':        r.giorno,
+    'Importo (€)': +r.assegnato.toFixed(2)
   }));
 
-  rows.push({
-    'Giorno / Data':        'TOTALE',
-    'Spesa Minima (€)':     +sumMin.toFixed(2),
-    'Budget Assegnato (€)': +sumAss.toFixed(2),
-    'Surplus Giorno (€)':   +(sumAss - sumMin).toFixed(2)
-  });
-
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 22 }, { wch: 20 }];
+  ws['!cols'] = [{ wch: 18 }, { wch: 16 }];
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Budget Caffè');
