@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Budget Randomizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- SheetJS -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <!-- PapaParse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #1a1208;
+      color: #f5e6d3;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────── */
+    .header {
+      background: linear-gradient(135deg, #2d1b0e 0%, #4a2c1a 100%);
+      padding: 22px 48px;
+      border-bottom: 2px solid #7a4f2e;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-icon { font-size: 2.2rem; }
+    .header h1 { font-size: 1.4rem; font-weight: 700; color: #f5c842; }
+    .header p  { font-size: 0.82rem; color: #c4956a; margin-top: 2px; }
+
+    /* ── LAYOUT ─────────────────────────────────────── */
+    .main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    .card {
+      background: #2d1b0e;
+      border: 1px solid #5a3a22;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f5e6d3;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #f5c842;
+      color: #1a1208;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* ── DROP ZONE ──────────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed #7a4f2e;
+      border-radius: 12px;
+      padding: 44px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #1a1208;
+      user-select: none;
+    }
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: #f5c842;
+      background: #221508;
+    }
+    .drop-zone .dz-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .drop-zone .dz-text { color: #c4956a; margin-bottom: 14px; font-size: 0.9rem; }
+
+    .format-badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    .badge {
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .badge-csv   { background: #1e3a2d; color: #7ecfa0; }
+    .badge-excel { background: #1a3050; color: #7eb8f5; }
+    .badge-pdf   { background: #4a1a1a; color: #f59e7e; }
+
+    input[type="file"] { display: none; }
+
+    /* ── BUTTONS ────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .btn:hover  { filter: brightness(1.1); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary   { background: #f5c842; color: #1a1208; }
+    .btn-secondary { background: transparent; border: 1px solid #7a4f2e; color: #c4956a; }
+    .btn-secondary:hover { border-color: #f5c842; color: #f5c842; }
+    .btn-excel  { background: #217346; color: #fff; }
+    .btn-pdf    { background: #c0392b; color: #fff; }
+    .btn-regen  { background: #3a2d10; border: 1px solid #f5c842; color: #f5c842; }
+
+    /* ── FORMS ──────────────────────────────────────── */
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      color: #c4956a;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      background: #1a1208;
+      border: 1px solid #5a3a22;
+      border-radius: 8px;
+      color: #f5e6d3;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      transition: border-color 0.15s;
+    }
+    select:focus,
+    input[type="number"]:focus { outline: none; border-color: #f5c842; }
+
+    .col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .budget-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+    }
+    .budget-row .form-group { flex: 1; }
+    .euro-wrap { position: relative; }
+    .euro-wrap span {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #c4956a;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .euro-wrap input { padding-left: 28px; }
+
+    /* ── TABLES ─────────────────────────────────────── */
+    .table-wrap {
+      border: 1px solid #5a3a22;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+    .table-scroll { max-height: 240px; overflow-y: auto; }
+    .table-scroll-tall { max-height: 420px; overflow-y: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    thead th {
+      background: #1a1208;
+      padding: 10px 16px;
+      text-align: left;
+      color: #f5c842;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tbody td { padding: 8px 16px; border-top: 1px solid #3a2410; }
+    tbody tr:hover td { background: #221508; }
+
+    .row-total td {
+      border-top: 2px solid #7a4f2e;
+      font-weight: 700;
+      color: #f5c842;
+      background: #221508;
+    }
+
+    /* ── STATS ──────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .stat-card {
+      background: #1a1208;
+      border: 1px solid #5a3a22;
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .stat-card .val {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #f5c842;
+    }
+    .stat-card .lbl {
+      font-size: 0.74rem;
+      color: #c4956a;
+      margin-top: 3px;
+    }
+
+    /* ── ALERTS ─────────────────────────────────────── */
+    .alert {
+      padding: 11px 15px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+    .alert-error   { background: #4a1a1a; border: 1px solid #f57e7e; color: #f5a0a0; }
+    .alert-success { background: #1a3a26; border: 1px solid #7ecfa0; color: #9ee6bc; }
+    .alert-warning { background: #3a2d10; border: 1px solid #f5c842; color: #f5d880; }
+
+    .mt-16 { margin-top: 16px; }
+    .export-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+
+    .hidden { display: none !important; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 600px) {
+      .header   { padding: 16px 20px; }
+      .main     { padding: 24px 14px 40px; }
+      .card     { padding: 20px 16px; }
+      .col-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .budget-row { flex-direction: column; align-items: stretch; }
+      .header h1 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HEADER -->
+<header class="header">
+  <div class="header-icon">☕</div>
+  <div>
+    <h1>Coffee Budget Randomizer</h1>
+    <p>Distribuzione casuale del budget giornaliero caffè con vincolo di spesa minima</p>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ── STEP 1: IMPORT ───────────────────────────────── -->
+  <div class="card" id="card-import">
+    <div class="card-title">
+      <span class="step-badge">1</span>
+      Importa la tabella dei prezzi giornalieri
+    </div>
+
+    <div class="drop-zone" id="dropZone">
+      <div class="dz-icon">📂</div>
+      <div class="dz-text">Trascina qui il file oppure clicca per selezionare</div>
+      <button class="btn btn-secondary" id="btnSelectFile">Sfoglia file</button>
+      <div class="format-badges">
+        <span class="badge badge-csv">CSV</span>
+        <span class="badge badge-excel">Excel .xlsx .xls</span>
+        <span class="badge badge-pdf">PDF</span>
+      </div>
+    </div>
+    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.pdf">
+
+    <div id="import-alert" class="hidden mt-16"></div>
+  </div>
+
+  <!-- ── STEP 2: COLUMN MAPPING ───────────────────────── -->
+  <div class="card hidden" id="card-columns">
+    <div class="card-title">
+      <span class="step-badge">2</span>
+      Mappa le colonne
+    </div>
+
+    <div class="col-grid">
+      <div class="form-group">
+        <label>Colonna — Giorno / Data</label>
+        <select id="colGiorno"></select>
+      </div>
+      <div class="form-group">
+        <label>Colonna — Spesa minima (€)</label>
+        <select id="colSpesa"></select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="confermaColonne()">Conferma e anteprima</button>
+
+    <div class="table-wrap hidden" id="preview-wrap">
+      <div class="table-scroll">
+        <table id="preview-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: BUDGET ────────────────────────────────── -->
+  <div class="card hidden" id="card-budget">
+    <div class="card-title">
+      <span class="step-badge">3</span>
+      Inserisci il budget mensile e genera
+    </div>
+
+    <div class="budget-row">
+      <div class="form-group">
+        <label>Budget totale del mese (€)</label>
+        <div class="euro-wrap">
+          <span>€</span>
+          <input type="number" id="budgetInput" placeholder="0.00" step="0.01" min="0">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="genera()">Genera distribuzione</button>
+    </div>
+
+    <div id="budget-alert" class="hidden mt-16"></div>
+  </div>
+
+  <!-- ── RESULTS ───────────────────────────────────────── -->
+  <div class="card hidden" id="card-results">
+    <div class="card-title">Risultati distribuzione</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="val" id="stat-min">—</div>
+        <div class="lbl">Somma minimi (€)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-budget">—</div>
+        <div class="lbl">Budget mensile (€)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-surplus">—</div>
+        <div class="lbl">Surplus distribuito (€)</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll-tall">
+        <table id="results-table"></table>
+      </div>
+    </div>
+
+    <div class="export-row">
+      <button class="btn btn-excel" onclick="esportaExcel()">⬇ Scarica Excel</button>
+      <button class="btn btn-pdf"   onclick="esportaPDF()">⬇ Scarica PDF</button>
+      <button class="btn btn-regen" onclick="genera()">↻ Rigenera</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+"use strict";
+
+// ── PDF.js worker ──────────────────────────────────────────
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── State ──────────────────────────────────────────────────
+let rawData   = [];   // raw rows from file (array of objects)
+let headers   = [];   // column names
+let giorni    = [];   // [{giorno:string, minimo:number}]
+let risultati = [];   // [{giorno, minimo, assegnato}]
+
+// ── Drag & drop + file input ───────────────────────────────
+const dropZone  = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const btnSelect = document.getElementById('btnSelectFile');
+
+btnSelect.addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) processFile(fileInput.files[0]);
+});
+
+// ── File dispatcher ────────────────────────────────────────
+async function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  setAlert('import-alert', 'warning', `Caricamento di "${file.name}"…`);
+  hideEl('card-columns');
+  hideEl('card-budget');
+  hideEl('card-results');
+
+  try {
+    if (ext === 'csv') {
+      await parseCSV(file);
+    } else if (ext === 'xlsx' || ext === 'xls') {
+      await parseExcel(file);
+    } else if (ext === 'pdf') {
+      await parsePDF(file);
+    } else {
+      setAlert('import-alert', 'error', 'Formato non supportato. Usa CSV, Excel (.xlsx/.xls) o PDF.');
+      return;
+    }
+  } catch (err) {
+    setAlert('import-alert', 'error', 'Errore nel caricamento: ' + err.message);
+    return;
+  }
+
+  if (!rawData.length) {
+    setAlert('import-alert', 'error', 'Nessun dato trovato nel file. Controlla il formato.');
+    return;
+  }
+
+  setAlert('import-alert', 'success',
+    `✓ ${rawData.length} righe importate da "${file.name}". Seleziona le colonne corrispondenti.`);
+  setupColumnMapping();
+}
+
+// ── CSV parser ─────────────────────────────────────────────
+function parseCSV(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: false,
+      complete: result => {
+        if (!result.data.length) { reject(new Error('File CSV vuoto o non leggibile.')); return; }
+        rawData = result.data;
+        headers = result.meta.fields || Object.keys(rawData[0]);
+        resolve();
+      },
+      error: err => reject(new Error(err.message))
+    });
+  });
+}
+
+// ── Excel parser ───────────────────────────────────────────
+function parseExcel(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false });
+        if (!data.length) { reject(new Error('Foglio Excel vuoto.')); return; }
+        rawData = data;
+        headers = Object.keys(data[0]);
+        resolve();
+      } catch (err) { reject(new Error('File Excel non leggibile: ' + err.message)); }
+    };
+    reader.onerror = () => reject(new Error('Errore nella lettura del file.'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ── PDF parser (best-effort text extraction) ───────────────
+async function parsePDF(file) {
+  const buffer = await file.arrayBuffer();
+  const pdf    = await pdfjsLib.getDocument({ data: buffer }).promise;
+
+  // Collect text items page by page, preserving Y position groupings
+  const allLines = [];
+
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const page    = await pdf.getPage(p);
+    const content = await page.getTextContent();
+
+    // Group items by rounded Y coordinate → simulates table rows
+    const yMap = new Map();
+    for (const item of content.items) {
+      const y = Math.round(item.transform[5]);
+      if (!yMap.has(y)) yMap.set(y, []);
+      yMap.get(y).push(item.str.trim());
+    }
+
+    // Sort by descending Y (top → bottom)
+    const sortedYs = [...yMap.keys()].sort((a, b) => b - a);
+    for (const y of sortedYs) {
+      const line = yMap.get(y).filter(s => s).join(' ');
+      if (line) allLines.push(line);
+    }
+  }
+
+  // Try to extract rows: each line needs at least 1 label and 1 numeric price
+  const rows = [];
+  const numRe = /\d+[.,]\d{2}|\d+/g;
+
+  for (const line of allLines) {
+    const nums = [...line.matchAll(numRe)].map(m => parseFloat(m[0].replace(',', '.')));
+    if (!nums.length) continue;
+
+    // The "giorno" is whatever text comes before the last number
+    const lastNumStr  = line.match(/[\d.,]+(?=[^\d.,]*$)/);
+    const giornoLabel = lastNumStr
+      ? line.slice(0, line.lastIndexOf(lastNumStr[0])).trim().replace(/\s+/g, ' ')
+      : line;
+
+    if (!giornoLabel) continue;
+
+    const price = nums[nums.length - 1]; // last number = price
+    if (price <= 0) continue;
+
+    rows.push({ Giorno: giornoLabel, 'Spesa (€)': price });
+  }
+
+  if (rows.length < 2) {
+    throw new Error(
+      'Impossibile estrarre dati tabellari sufficienti dal PDF. ' +
+      'Il parsing PDF è approssimativo: per risultati certi usa CSV o Excel.'
+    );
+  }
+
+  setAlert('import-alert', 'warning',
+    '⚠ Parsing PDF in modalità best-effort. Verifica l\'anteprima prima di procedere.');
+
+  rawData = rows;
+  headers = ['Giorno', 'Spesa (€)'];
+}
+
+// ── Column mapping ─────────────────────────────────────────
+function setupColumnMapping() {
+  showEl('card-columns');
+  hideEl('preview-wrap');
+
+  const selG = document.getElementById('colGiorno');
+  const selS = document.getElementById('colSpesa');
+  selG.innerHTML = '';
+  selS.innerHTML = '';
+
+  headers.forEach(h => {
+    selG.innerHTML += `<option value="${h}">${h}</option>`;
+    selS.innerHTML += `<option value="${h}">${h}</option>`;
+  });
+
+  // Auto-detect columns by common keywords
+  const autoG = headers.find(h => /giorn|data|day|date|periodo|mese/i.test(h));
+  const autoS = headers.find(h => /spes|prez|cost|import|€|eur|tota|amount|val/i.test(h));
+
+  if (autoG) selG.value = autoG;
+  if (autoS) selS.value = autoS;
+
+  // Avoid same column selected for both
+  if (selG.value === selS.value && headers.length > 1) {
+    selS.value = headers.find(h => h !== selG.value) || headers[headers.length - 1];
+  }
+}
+
+function confermaColonne() {
+  const colG = document.getElementById('colGiorno').value;
+  const colS = document.getElementById('colSpesa').value;
+
+  if (!colG || !colS) {
+    setAlert('import-alert', 'error', 'Seleziona entrambe le colonne.');
+    return;
+  }
+
+  giorni = rawData.map((row, i) => {
+    const label = String(row[colG] ?? '').trim() || `Giorno ${i + 1}`;
+    const raw   = String(row[colS] ?? '0').replace(',', '.').replace(/[^\d.]/g, '');
+    const val   = parseFloat(raw);
+    return { giorno: label, minimo: isNaN(val) ? 0 : val };
+  }).filter(r => r.minimo >= 0);
+
+  if (!giorni.length) {
+    setAlert('import-alert', 'error', 'Nessun dato valido dopo il mapping. Controlla le colonne.');
+    return;
+  }
+
+  // Render preview
+  const tbl = document.getElementById('preview-table');
+  tbl.innerHTML = `
+    <thead><tr><th>Giorno / Data</th><th>Spesa minima (€)</th></tr></thead>
+    <tbody>
+      ${giorni.map(r =>
+        `<tr><td>${escHtml(r.giorno)}</td><td>€ ${r.minimo.toFixed(2)}</td></tr>`
+      ).join('')}
+    </tbody>`;
+
+  showEl('preview-wrap');
+  showEl('card-budget');
+  document.getElementById('card-budget').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Distribution algorithm ─────────────────────────────────
+// Uses Dirichlet(1,…,1) via -log(U) trick for natural randomness
+function genera() {
+  clearAlert('budget-alert');
+
+  const budgetRaw = document.getElementById('budgetInput').value;
+  const budget    = parseFloat(budgetRaw);
+
+  if (!budgetRaw || isNaN(budget) || budget <= 0) {
+    setAlert('budget-alert', 'error', 'Inserisci un budget valido maggiore di zero.');
+    return;
+  }
+
+  const n         = giorni.length;
+  const sumMinimi = giorni.reduce((s, r) => s + r.minimo, 0);
+
+  if (sumMinimi > budget + 0.005) {
+    const diff = (sumMinimi - budget).toFixed(2);
+    setAlert('budget-alert', 'error',
+      `La somma dei minimi (€ ${sumMinimi.toFixed(2)}) supera il budget (€ ${budget.toFixed(2)}). ` +
+      `Aumenta il budget di almeno € ${diff}.`);
+    return;
+  }
+
+  const surplus = Math.max(0, budget - sumMinimi);
+
+  // Dirichlet weights: -log(uniform) → symmetric Dirichlet(1)
+  const weights = Array.from({ length: n }, () => -Math.log(Math.random() || 1e-15));
+  const totW    = weights.reduce((a, b) => a + b, 0);
+
+  risultati = [];
+  let rollingTotal = 0;
+
+  for (let i = 0; i < n - 1; i++) {
+    const share    = (weights[i] / totW) * surplus;
+    const assigned = parseFloat((giorni[i].minimo + share).toFixed(2));
+    risultati.push({ ...giorni[i], assegnato: assigned });
+    rollingTotal += assigned;
+  }
+
+  // Last day absorbs rounding residual so total = budget exactly
+  const lastVal = parseFloat((budget - rollingTotal).toFixed(2));
+  risultati.push({ ...giorni[n - 1], assegnato: lastVal });
+
+  // Update stat cards
+  document.getElementById('stat-min').textContent     = `€ ${sumMinimi.toFixed(2)}`;
+  document.getElementById('stat-budget').textContent  = `€ ${budget.toFixed(2)}`;
+  document.getElementById('stat-surplus').textContent = `€ ${surplus.toFixed(2)}`;
+
+  // Render results table
+  const totAss  = risultati.reduce((s, r) => s + r.assegnato, 0);
+  const tbl     = document.getElementById('results-table');
+
+  tbl.innerHTML = `
+    <thead>
+      <tr>
+        <th>Giorno / Data</th>
+        <th style="text-align:right">Minimo (€)</th>
+        <th style="text-align:right">Assegnato (€)</th>
+        <th style="text-align:right">Surplus giorno (€)</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${risultati.map(r => `
+        <tr>
+          <td>${escHtml(r.giorno)}</td>
+          <td style="text-align:right">${r.minimo.toFixed(2)}</td>
+          <td style="text-align:right"><strong>${r.assegnato.toFixed(2)}</strong></td>
+          <td style="text-align:right; color:#7ecfa0">+${(r.assegnato - r.minimo).toFixed(2)}</td>
+        </tr>`).join('')}
+      <tr class="row-total">
+        <td>TOTALE</td>
+        <td style="text-align:right">${sumMinimi.toFixed(2)}</td>
+        <td style="text-align:right">${totAss.toFixed(2)}</td>
+        <td style="text-align:right">+${(totAss - sumMinimi).toFixed(2)}</td>
+      </tr>
+    </tbody>`;
+
+  showEl('card-results');
+  document.getElementById('card-results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Export Excel ───────────────────────────────────────────
+function esportaExcel() {
+  if (!risultati.length) return;
+
+  const sumMin = risultati.reduce((s, r) => s + r.minimo, 0);
+  const sumAss = risultati.reduce((s, r) => s + r.assegnato, 0);
+
+  const rows = risultati.map(r => ({
+    'Giorno / Data':        r.giorno,
+    'Spesa Minima (€)':     +r.minimo.toFixed(2),
+    'Budget Assegnato (€)': +r.assegnato.toFixed(2),
+    'Surplus Giorno (€)':   +(r.assegnato - r.minimo).toFixed(2)
+  }));
+
+  rows.push({
+    'Giorno / Data':        'TOTALE',
+    'Spesa Minima (€)':     +sumMin.toFixed(2),
+    'Budget Assegnato (€)': +sumAss.toFixed(2),
+    'Surplus Giorno (€)':   +(sumAss - sumMin).toFixed(2)
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 22 }, { wch: 20 }];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Budget Caffè');
+
+  XLSX.writeFile(wb, `budget_caffe_${today()}.xlsx`);
+}
+
+// ── Export PDF ─────────────────────────────────────────────
+function esportaPDF() {
+  if (!risultati.length) return;
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const budget  = parseFloat(document.getElementById('budgetInput').value);
+  const sumMin  = risultati.reduce((s, r) => s + r.minimo, 0);
+  const sumAss  = risultati.reduce((s, r) => s + r.assegnato, 0);
+  const surplus = sumAss - sumMin;
+
+  // Title
+  doc.setFontSize(17);
+  doc.setTextColor(26, 18, 8);
+  doc.setFont(undefined, 'bold');
+  doc.text('Coffee Budget Randomizer', 14, 18);
+
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(100);
+  doc.text(`Generato il ${new Date().toLocaleDateString('it-IT')}`, 14, 25);
+
+  // Summary line
+  doc.setFontSize(9.5);
+  doc.setTextColor(40);
+  doc.text(
+    `Budget: € ${budget.toFixed(2)}   |   Somma minimi: € ${sumMin.toFixed(2)}   |   Surplus distribuito: € ${surplus.toFixed(2)}`,
+    14, 32
+  );
+
+  // Table data
+  const body = risultati.map(r => [
+    r.giorno,
+    `€ ${r.minimo.toFixed(2)}`,
+    `€ ${r.assegnato.toFixed(2)}`,
+    `+€ ${(r.assegnato - r.minimo).toFixed(2)}`
+  ]);
+
+  body.push([
+    'TOTALE',
+    `€ ${sumMin.toFixed(2)}`,
+    `€ ${sumAss.toFixed(2)}`,
+    `+€ ${surplus.toFixed(2)}`
+  ]);
+
+  doc.autoTable({
+    startY: 37,
+    head: [['Giorno / Data', 'Spesa Minima', 'Budget Assegnato', 'Surplus Giorno']],
+    body,
+    styles:     { font: 'helvetica', fontSize: 9, cellPadding: 3 },
+    headStyles: { fillColor: [245, 200, 66], textColor: [26, 18, 8], fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: [250, 248, 245] },
+    didParseCell(data) {
+      const last = body.length - 1;
+      if (data.section === 'body' && data.row.index === last) {
+        data.cell.styles.fontStyle  = 'bold';
+        data.cell.styles.fillColor  = [240, 235, 200];
+        data.cell.styles.textColor  = [26, 18, 8];
+      }
+    }
+  });
+
+  doc.save(`budget_caffe_${today()}.pdf`);
+}
+
+// ── Utilities ──────────────────────────────────────────────
+function setAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} mt-16`;
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+function clearAlert(id) {
+  const el = document.getElementById(id);
+  el.classList.add('hidden');
+  el.textContent = '';
+}
+function showEl(id)  { document.getElementById(id).classList.remove('hidden'); }
+function hideEl(id)  { document.getElementById(id).classList.add('hidden'); }
+function escHtml(s)  {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+</script>
+
+</body>
+</html>
