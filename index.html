@@ -76,16 +76,17 @@
     .path-grid { grid-template-columns: 1fr; }
   }
   .path-card {
-    background: var(--surface); border: 1px solid var(--border);
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+      linear-gradient(135deg, rgba(66,133,244,0.25) 0%, rgba(255,255,255,0.05) 50%, rgba(52,168,83,0.18) 100%) border-box;
+    border: 1px solid transparent;
     border-radius: 16px; padding: 32px 24px;
     display: flex; flex-direction: column; align-items: center;
     gap: 16px; cursor: pointer; text-decoration: none;
-    transition: transform 0.2s var(--ease-out), border-color 0.15s ease, box-shadow 0.2s var(--ease-out); text-align: center;
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out); text-align: center;
   }
   @media (hover: hover) and (pointer: fine) {
     .path-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(255,255,255,0.15);
       box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     }
   }
