@@ -304,7 +304,7 @@ function show(code){
 
     <div class="fbox">
       <div style="font-size:20px;flex-shrink:0;margin-top:2px">💡</div>
-      <div><strong>Formula regime forfettario:</strong> Reddito imponibile = Ricavi × <strong>${item.q}%</strong> − Contributi INPS versati. Sull'imponibile netto si applica l'imposta sostitutiva (<strong>15%</strong> ordinaria o <strong>5%</strong> per i primi 5 anni di nuova attività). Limite ricavi 2025: <strong>€ 85.000</strong>. IVA non applicata sulle fatture emesse.</div>
+      <div><strong>Formula regime forfettario:</strong> Reddito imponibile = Ricavi × <strong>${item.q}%</strong> − Contributi INPS versati. Sull'imponibile netto si applica l'imposta sostitutiva (<strong>15%</strong> ordinaria o <strong>5%</strong> per i primi 5 anni di nuova attività). Limite ricavi 2025: <strong>€ 100.000</strong>. IVA non applicata sulle fatture emesse.</div>
     </div>
 
     <div class="csec">
@@ -317,8 +317,7 @@ function show(code){
           <option value="5">5% — nuova attività</option>
         </select>
       </div>
-      <div id="ra85" class="ralert yw"><span>⚠️</span><div><strong>Attenzione:</strong> superi €85.000 — uscita dal regime dall'anno successivo.</div></div>
-      <div id="ra100" class="ralert rd"><span>🚫</span><div><strong>Uscita immediata:</strong> oltre €100.000 perdi il regime nell'anno stesso (art. 1 c. 71 L. 190/2014).</div></div>
+      <div id="ra100" class="ralert rd"><span>🚫</span><div><strong>Attenzione:</strong> superi €100.000 — uscita dal regime forfettario.</div></div>
       <div class="crow">
         <span class="clabel">Cassa previdenziale</span>
         <select class="cinput" id="cs" onchange="onCs(${item.q})">
@@ -339,7 +338,7 @@ function show(code){
       </div>
       <div class="check-rid" id="cr35">
         <input type="checkbox" id="rd" onchange="calc(${item.q})">
-        <label for="rd"><strong>Riduzione 35% startup</strong> — primi 3 anni INPS artigiani/commercianti</label>
+        <label for="rd"><strong>Riduzione 35% startup</strong> — INPS artigiani/commercianti</label>
       </div>
       <div class="cres" id="cr">
         <div class="crow2"><span>Ricavi lordi</span><span id="r1"></span></div>
@@ -379,9 +378,7 @@ function calc(q){
   const cs=csEl?csEl.value:'';
   const isArtCom=cs==='art'||cs==='com';
   const cr=document.getElementById('cr');
-  const a85=document.getElementById('ra85');
   const a100=document.getElementById('ra100');
-  if(a85) a85.classList.toggle('on',ricavi>85000&&ricavi<=100000);
   if(a100) a100.classList.toggle('on',ricavi>100000);
   if(!ricavi||ricavi<=0){cr.style.display='none';return;}
   const riduzione=isArtCom&&rid35?contribLordi*0.35:0;
