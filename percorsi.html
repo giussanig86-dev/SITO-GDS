@@ -158,8 +158,8 @@ nav {
   100% { transform: translateY(0) rotate(-5deg); }
 }
 @keyframes building-pulse {
-  0%,100% { transform: scale(1); filter: grayscale(0.3) drop-shadow(0 0 0px #4285F4); }
-  50%     { transform: scale(1.12); filter: grayscale(0) drop-shadow(0 0 12px #4285F455); }
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 0px #4285F4); }
+  50%     { transform: scale(1.12); filter: drop-shadow(0 0 12px #4285F455); }
 }
 @keyframes scale-balance {
   0%,100% { transform: rotate(0deg); }
@@ -167,8 +167,8 @@ nav {
   75%     { transform: rotate(8deg); }
 }
 @keyframes bulb-glow {
-  0%,100% { filter: grayscale(0.3) drop-shadow(0 0 0px #FBBC05); }
-  50%     { filter: grayscale(0) drop-shadow(0 0 14px #FBBC0588); transform: scale(1.1); }
+  0%,100% { filter: drop-shadow(0 0 0px #FBBC05); }
+  50%     { filter: drop-shadow(0 0 14px #FBBC0588); transform: scale(1.1); }
 }
 @keyframes money-bounce {
   0%,100% { transform: translateY(0) rotate(0deg); }
@@ -178,9 +178,9 @@ nav {
 }
 
 .path-icon {
-  font-size: 56px;
-  line-height: 1;
-  filter: grayscale(0.3);
+  width: 52px;
+  height: 52px;
+  color: var(--muted2);
   display: inline-block;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -254,9 +254,10 @@ nav {
 }
 
 .section-icon {
-  font-size: 72px;
+  width: 64px;
+  height: 64px;
   margin-bottom: 28px;
-  filter: grayscale(0.2);
+  color: var(--muted2);
   display: inline-block;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -582,28 +583,28 @@ nav {
 
     <div class="path-grid">
       <div class="path-card" onclick="startFlow('idea')">
-        <div class="path-icon">💡</div>
+        <div class="path-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
         <h3 class="path-title">Ho un'idea</h3>
         <p class="path-desc">Non ho ancora un'impresa ma voglio capire come trasformare la mia idea in un business concreto.</p>
         <div class="path-arrow">→</div>
       </div>
 
       <div class="path-card" onclick="startFlow('verify')">
-        <div class="path-icon">🏢</div>
+        <div class="path-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 9v12"/><path d="M9 15h6"/></svg></div>
         <h3 class="path-title">Ho sentito parlare di Startup Innovativa</h3>
         <p class="path-desc">Voglio verificare se ho i requisiti per diventare startup innovativa e accedere alle agevolazioni della legge 221/2012.</p>
         <div class="path-arrow">→</div>
       </div>
 
       <div class="path-card" onclick="startFlow('structure')">
-        <div class="path-icon">⚖️</div>
+        <div class="path-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div>
         <h3 class="path-title">Voglio scegliere la struttura giusta</h3>
         <p class="path-desc">Devo capire quale forma societaria è più adatta al mio progetto: ditta individuale, SNC, SRL o SRLS.</p>
         <div class="path-arrow">→</div>
       </div>
 
       <div class="path-card" onclick="startFlow('finance')">
-        <div class="path-icon">💰</div>
+        <div class="path-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <h3 class="path-title">Voglio trovare finanziamenti per il mio progetto</h3>
         <p class="path-desc">Voglio scoprire le opzioni di finanziamento disponibili: crowdfunding, bandi, agevolazioni fiscali e credito.</p>
         <div class="path-arrow">→</div>
@@ -631,7 +632,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-rocket">🚀</div>
+        <div class="section-icon anim-rocket"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <h2 class="section-title">Da dove iniziamo?<br>La tua idea</h2>
         <p class="section-text">
           Trasformare un'idea in impresa richiede strategia, struttura e competenza. GDS ti accompagna in ogni fase: dalla validazione dell'idea al business plan, fino alla costituzione formale.
@@ -658,7 +659,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">📋</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg></div>
         <h2 class="section-title">Hai già un Business Plan?</h2>
         <p class="section-text">
           Il Business Plan è la mappa della tua impresa: descrive il progetto, i costi, i ricavi attesi e la strategia di crescita.
@@ -687,7 +688,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🎯</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h2 class="section-title">Quale settore?</h2>
         <p class="section-text">
           Ogni settore ha caratteristiche specifiche: normative, agevolazioni fiscali, bandi dedicati. Seleziona l'area della tua idea.
@@ -719,7 +720,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">👥</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h2 class="section-title">Quante persone coinvolte?</h2>
         <p class="section-text">
           Il numero di soci e collaboratori influisce sulla scelta della forma giuridica e sulla gestione amministrativa.
@@ -748,7 +749,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🔄</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
         <h2 class="section-title">Stai acquisendo un'attività<br>già esistente?</h2>
         <p class="section-text">
           La modalità di avvio influisce su pratiche, costi e tempistiche.
@@ -786,7 +787,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">⏰</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <h2 class="section-title">Quando vuoi avviare l'attività?</h2>
         <p class="section-text">
           Le tempistiche ci aiutano a pianificare il percorso più adatto.
@@ -816,7 +817,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-money">💰</div>
+        <div class="section-icon anim-money"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <h2 class="section-title">Come intendi finanziare<br>il progetto?</h2>
         <p class="section-text">
           Puoi selezionare più opzioni. Questo ci aiuta a suggerirti gli strumenti più adatti.
@@ -857,7 +858,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">✅</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
         <h2 class="section-title">Il tuo profilo imprenditoriale</h2>
         
         <!-- Dynamic report content -->
@@ -906,7 +907,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-rocket">🚀</div>
+        <div class="section-icon anim-rocket"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <h2 class="section-title">Verifica requisiti<br>Startup Innovativa</h2>
         <p class="section-text">
           Le startup innovative godono di numerosi vantaggi: esenzione da bollo e diritti camerali, disciplina del lavoro flessibile, equity crowdfunding, facilitazioni per l'accesso al credito e incentivi fiscali. Verifichiamo insieme se hai i requisiti.
@@ -934,7 +935,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🇮🇹</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <h2 class="section-title">Residenza in Italia o UE</h2>
         <p class="section-text">
           La società deve essere residente in Italia o in uno degli Stati membri dell'Unione europea, purché abbia una sede produttiva o una filiale in Italia.
@@ -963,7 +964,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">📅</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></div>
         <h2 class="section-title">Costituita da meno di 60 mesi</h2>
         <p class="section-text">
           La società deve essere costituita da non più di 60 mesi (5 anni) e deve aver iniziato l'attività d'impresa. La data di costituzione è rilevabile nella Visura Ordinaria del Registro Imprese.
@@ -992,7 +993,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💸</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h2 class="section-title">Non ha distribuito utili</h2>
         <p class="section-text">
           La startup innovativa non deve aver distribuito e non deve distribuire utili ai soci.
@@ -1021,7 +1022,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">📊</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></div>
         <h2 class="section-title">Valore produzione &lt; 5 milioni €</h2>
         <p class="section-text">
           A partire dal secondo anno di attività, il totale del valore della produzione annua non deve superare 5 milioni di euro (dall'ultimo bilancio approvato).
@@ -1050,7 +1051,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🔄</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
         <h2 class="section-title">Non nata da fusione/scissione</h2>
         <p class="section-text">
           La società non deve essere stata costituita da fusione, scissione societaria o a seguito di cessione di azienda o di ramo di azienda.
@@ -1079,7 +1080,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-bulb">💡</div>
+        <div class="section-icon anim-bulb"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
         <h2 class="section-title">Oggetto sociale innovativo</h2>
         <p class="section-text">
           L'oggetto sociale esclusivo o prevalente deve essere lo sviluppo, la produzione e la commercializzazione di prodotti o servizi innovativi ad alto valore tecnologico. Non deve svolgere attività prevalente di agenzia o consulenza.
@@ -1108,13 +1109,13 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🎯</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h2 class="section-title">Almeno 1 di questi 3 requisiti</h2>
         <p class="section-text">
           Devi possedere almeno uno dei seguenti requisiti specifici:
         </p>
         <div class="quiz-options">
-          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'rs'); validateAndProceedVerify()">💰 Spese R&S ≥ 15% del valore produzione</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'rs'); validateAndProceedVerify()">Spese R&S ≥ 15% del valore produzione</button>
           <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'team'); validateAndProceedVerify()">👨‍🎓 Team qualificato (1/3 con dottorato o 2/3 con magistrale)</button>
           <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', 'brevetto'); validateAndProceedVerify()">📜 Brevetto/software registrato</button>
           <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('verify', 'requisito_specifico', false); showVerifyResult()">✗ Nessuno dei tre</button>
@@ -1139,7 +1140,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">📊</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></div>
         <h2 class="section-title">Verifica Completata</h2>
         
         <!-- Dynamic report content -->
@@ -1187,7 +1188,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-scale">⚖️</div>
+        <div class="section-icon anim-scale"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div>
         <h2 class="section-title">Quale struttura giuridica?</h2>
         <p class="section-text">
           La scelta della forma giuridica impatta su responsabilità patrimoniale, tassazione, costi di gestione e flessibilità operativa. Ti guidiamo verso la soluzione più adatta al tuo progetto.
@@ -1212,7 +1213,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">👥</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h2 class="section-title">Quanti soci/fondatori?</h2>
         <p class="section-text">
           Il numero di persone coinvolte è un primo elemento discriminante.
@@ -1239,7 +1240,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🏗</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
         <h2 class="section-title">Livello di rischio dell'attività</h2>
         <p class="section-text">
           Un'attività con maggiori rischi patrimoniali (es. investimenti elevati, contratti importanti, responsabilità verso terzi) richiede protezione del patrimonio personale.
@@ -1266,7 +1267,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-money">💰</div>
+        <div class="section-icon anim-money"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <h2 class="section-title">Capitale iniziale disponibile</h2>
         <p class="section-text">
           Alcune forme societarie richiedono un capitale sociale minimo. Per le SRL serve almeno 1€ (SRLS) o importi superiori per SRL ordinarie.
@@ -1293,7 +1294,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-rocket">🚀</div>
+        <div class="section-icon anim-rocket"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <h2 class="section-title">Ambizioni di crescita</h2>
         <p class="section-text">
           Pensi di cercare investitori esterni, quotarti in borsa o scalare rapidamente?
@@ -1320,7 +1321,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">✅</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
         <h2 class="section-title">La struttura consigliata</h2>
         <div class="result-box success" id="structure-result">
           <div class="result-icon">🏢</div>
@@ -1392,7 +1393,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-money">💰</div>
+        <div class="section-icon anim-money"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <h2 class="section-title">Come finanziare<br>la tua impresa</h2>
         <p class="section-text">
           Esistono molte opzioni per raccogliere capitale: crowdfunding, bandi regionali, agevolazioni fiscali, credito bancario agevolato e incentivi all'investimento. Troviamo insieme la strada migliore.
@@ -1420,16 +1421,16 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🎯</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h2 class="section-title">Fase del progetto</h2>
         <p class="section-text">
           Diverse fasi richiedono strumenti diversi. In quale fase ti trovi?
         </p>
         <div class="quiz-options">
-          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'idea'); nextStep('finance', 3)">💡 Idea / Pre-seed (prima di partire)</button>
-          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'startup'); nextStep('finance', 3)">🚀 Startup / Seed (primi 2 anni)</button>
-          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'crescita'); nextStep('finance', 3)">📈 Crescita / Scaling (espansione)</button>
-          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'consolidata'); nextStep('finance', 3)">🏢 Impresa consolidata (migliorare struttura)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'idea'); nextStep('finance', 3)">Idea / Pre-seed (prima di partire)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'startup'); nextStep('finance', 3)">Startup / Seed (primi 2 anni)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'crescita'); nextStep('finance', 3)">Crescita / Scaling (espansione)</button>
+          <button class="quiz-option" onclick="selectQuiz(this); storeAnswer('finance', 'fase', 'consolidata'); nextStep('finance', 3)">Impresa consolidata (migliorare struttura)</button>
         </div>
       </div>
     </div>
@@ -1451,7 +1452,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">💵</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h2 class="section-title">Capitale necessario</h2>
         <p class="section-text">
           Di quanto capitale hai bisogno per raggiungere il prossimo traguardo?
@@ -1482,7 +1483,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-building">🏢</div>
+        <div class="section-icon anim-building"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 9v12"/><path d="M9 15h6"/></svg></div>
         <h2 class="section-title">Sei già una società di capitali?</h2>
         <p class="section-text">
           Alcuni strumenti di finanziamento (equity crowdfunding, investitori) sono accessibili solo a SRL/SPA.
@@ -1512,7 +1513,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-rocket">🚀</div>
+        <div class="section-icon anim-rocket"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <h2 class="section-title">Hai requisiti startup innovativa?</h2>
         <p class="section-text">
           Le startup innovative accedono a canali esclusivi come equity crowdfunding e agevolazioni fiscali potenziate.
@@ -1542,7 +1543,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🤝</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg></div>
         <h2 class="section-title">Disponibilità a cedere quote</h2>
         <p class="section-text">
           Sei disposto a far entrare investitori esterni cedendo una parte della proprietà dell'azienda?
@@ -1571,7 +1572,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🏦</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>
         <h2 class="section-title">Garanzie patrimoniali</h2>
         <p class="section-text">
           Hai garanzie (immobili, fideiussioni) da offrire per un prestito bancario?
@@ -1600,7 +1601,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon">🌐</div>
+        <div class="section-icon"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
         <h2 class="section-title">Community e visibilità</h2>
         <p class="section-text">
           Hai una community o sei disposto a promuovere pubblicamente il progetto per raccogliere fondi dalla "folla" (crowdfunding)?
@@ -1629,7 +1630,7 @@ nav {
       </div>
 
       <div class="section-content">
-        <div class="section-icon anim-bulb">💡</div>
+        <div class="section-icon anim-bulb"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
         <h2 class="section-title">Le tue opzioni personalizzate</h2>
         
         <!-- Dynamic report content -->
@@ -1828,7 +1829,7 @@ function generateIdeaReport() {
   // Build profile summary
   let profileHTML = `
     <div class="report-section">
-      <div class="report-section-title">✅ Il tuo profilo</div>
+      <div class="report-section-title">Il tuo profilo</div>
       <div class="report-section-content">
         • <strong>Settore:</strong> ${settoreLabels[data.settore] || data.settore}<br>
         • <strong>Team:</strong> ${personeLabel}<br>
@@ -1880,7 +1881,7 @@ function generateIdeaReport() {
   
   let servicesHTML = `
     <div class="report-section">
-      <div class="report-section-title">🎯 Servizi prioritari per te</div>
+      <div class="report-section-title">Servizi prioritari per te</div>
       <div class="checklist" style="margin-top: 12px;">
         ${services.map(s => `
           <div class="checklist-item done">
@@ -2074,7 +2075,7 @@ function generateVerifyReport() {
   // Next steps / alternatives
   reportHTML += `
     <div class="report-section">
-      <div class="report-section-title">${allPassed ? '📅 Prossimi passi' : '💡 Alternative consigliate'}</div>
+      <div class="report-section-title">${allPassed ? 'Prossimi passi' : 'Alternative consigliate'}</div>
       <div class="report-section-content">
         ${allPassed ? `
           <strong>1. Preparazione documentazione</strong><br>
@@ -2208,7 +2209,7 @@ function generateFinanceReport() {
   if (data.societa_capitali === 'si' && data.equity && data.community && 
       (data.startup === 'si' || data.startup === 'forse')) {
     options.push({
-      icon: '🌐',
+      icon: '→',
       title: 'Equity Crowdfunding',
       desc: 'Raccogli capitale cedendo quote via piattaforme autorizzate Consob. Ideale per startup innovative con community.',
       priority: 'high'
@@ -2219,7 +2220,7 @@ function generateFinanceReport() {
   if (data.equity && (data.capitale === 'medio' || data.capitale === 'grande') && 
       (data.fase === 'startup' || data.fase === 'crescita')) {
     options.push({
-      icon: '👼',
+      icon: '→',
       title: 'Business Angels / Venture Capital',
       desc: 'Investitori privati che apportano capitale e competenze. Richiedono quote societarie.',
       priority: 'high'
@@ -2229,7 +2230,7 @@ function generateFinanceReport() {
   // FONDO CENTRALE DI GARANZIA
   if (!data.garanzie || data.garanzie === false) {
     options.push({
-      icon: '🏦',
+      icon: '→',
       title: 'Fondo Centrale di Garanzia',
       desc: 'Garanzia statale fino all\'80% su prestiti bancari (fino 2,5M€). Essenziale se hai poche garanzie.',
       priority: 'high'
@@ -2239,7 +2240,7 @@ function generateFinanceReport() {
   // REWARD CROWDFUNDING
   if (data.community && !data.equity && (data.capitale === 'micro' || data.capitale === 'piccolo')) {
     options.push({
-      icon: '🎁',
+      icon: '→',
       title: 'Reward Crowdfunding',
       desc: 'Pre-vendi il prodotto/servizio senza cedere quote. Ottimo per validare il mercato.',
       priority: 'medium'
@@ -2249,7 +2250,7 @@ function generateFinanceReport() {
   // MICROCREDITO
   if (data.capitale === 'micro' && data.fase === 'idea') {
     options.push({
-      icon: '💳',
+      icon: '→',
       title: 'Microcredito',
       desc: 'Prestiti fino a 40.000€ con tassi agevolati, senza garanzie reali richieste.',
       priority: 'medium'
@@ -2258,7 +2259,7 @@ function generateFinanceReport() {
   
   // BANDI REGIONALI (always show)
   options.push({
-    icon: '📜',
+    icon: '→',
     title: 'Bandi Regionali e Nazionali',
     desc: 'Contributi a fondo perduto e finanziamenti agevolati. Presenti in tutte le fasi.',
     priority: 'medium'
@@ -2267,7 +2268,7 @@ function generateFinanceReport() {
   // INCENTIVI FISCALI (se startup innovativa)
   if (data.startup === 'si' || data.startup === 'forse') {
     options.push({
-      icon: '💰',
+      icon: '→',
       title: 'Incentivi Fiscali per Startup',
       desc: 'Detrazione IRPEF 30% (persone fisiche) o deduzione IRES 30% (società) per chi investe in startup innovative.',
       priority: 'medium'
@@ -2277,7 +2278,7 @@ function generateFinanceReport() {
   // CREDITO BANCARIO TRADIZIONALE
   if (data.garanzie && (data.fase === 'consolidata' || data.fase === 'crescita')) {
     options.push({
-      icon: '🏛',
+      icon: '→',
       title: 'Credito Bancario Tradizionale',
       desc: 'Prestito bancario classico. Le tue garanzie facilitano l\'accesso.',
       priority: 'low'
@@ -2305,7 +2306,7 @@ function generateFinanceReport() {
   
   let reportHTML = `
     <div class="report-section">
-      <div class="report-section-title">📊 Il tuo profilo</div>
+      <div class="report-section-title">Il tuo profilo</div>
       <div class="report-section-content">
         • <strong>Fase:</strong> ${faseLabels[data.fase] || data.fase}<br>
         • <strong>Capitale necessario:</strong> ${capitaleLabels[data.capitale] || data.capitale}<br>
@@ -2347,7 +2348,7 @@ function generateFinanceReport() {
   // Next steps
   reportHTML += `
     <div class="report-section">
-      <div class="report-section-title">📅 Prossimi passi</div>
+      <div class="report-section-title">Prossimi passi</div>
       <div class="report-section-content">
         <strong>1. Verifica requisiti</strong><br>
         Controlliamo insieme se hai tutti i requisiti per le opzioni selezionate<br><br>
