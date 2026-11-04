@@ -94,6 +94,16 @@ select.cinput{width:auto}
 .ralert.yw strong{color:var(--yellow)}
 .ralert.rd{background:rgba(234,67,53,.08);border:1px solid rgba(234,67,53,.25);color:var(--muted2)}
 .ralert.rd strong{color:var(--red)}
+.inps-box{background:rgba(66,133,244,.06);border:1px solid rgba(66,133,244,.18);border-radius:10px;padding:12px 16px;margin-bottom:10px;display:none}
+.inps-box.on{display:block}
+.inps-box-title{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.inps-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;gap:8px}
+.inps-row:last-child{border-bottom:none}
+.inps-row span:first-child{color:var(--muted2);flex:1}
+.inps-row span:last-child{font-weight:600;font-family:'Courier New',monospace;font-size:12px;flex-shrink:0}
+.inps-row.tot span{color:var(--blue);font-weight:700}
+.inps-row.note span{color:var(--muted);font-style:italic;font-weight:400}
+.inps-box-foot{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;border-top:1px solid rgba(255,255,255,.06);padding-top:6px}
 .dsec{padding:24px 32px;border-top:1px solid var(--border);background:var(--surface2)}
 .dsec h3{font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
 .dtext{font-size:13px;color:var(--muted2);line-height:1.75;white-space:pre-line}
@@ -304,21 +314,20 @@ function show(code){
 
     <div class="fbox">
       <div style="font-size:20px;flex-shrink:0;margin-top:2px">💡</div>
-      <div><strong>Formula regime forfettario:</strong> Reddito imponibile = Ricavi × <strong>${item.q}%</strong> − Contributi INPS versati. Sull'imponibile netto si applica l'imposta sostitutiva (<strong>15%</strong> ordinaria o <strong>5%</strong> per i primi 5 anni di nuova attività). Limite ricavi 2025: <strong>€ 85.000</strong>. IVA non applicata sulle fatture emesse.</div>
+      <div><strong>Formula regime forfettario:</strong> Reddito imponibile = Ricavi × <strong>${item.q}%</strong> − Contributi INPS versati. Sull'imponibile netto si applica l'imposta sostitutiva (<strong>15%</strong> ordinaria o <strong>5%</strong> per i primi 5 anni di nuova attività). Limite ricavi 2025: <strong>€ 100.000</strong>. IVA non applicata sulle fatture emesse.</div>
     </div>
 
     <div class="csec">
       <h3>🧮 Simulatore fiscale</h3>
       <div class="crow">
         <span class="clabel">Ricavi annui (€)</span>
-        <input class="cinput" id="ri" type="number" placeholder="Es. 40.000" min="0" oninput="calc(${item.q})"/>
-        <select class="cinput" id="al" onchange="calc(${item.q})">
+        <input class="cinput" id="ri" type="number" placeholder="Es. 40.000" min="0" oninput="updateInps(${item.q})"/>
+        <select class="cinput" id="al" onchange="updateInps(${item.q})">
           <option value="15">15% — ordinaria</option>
           <option value="5">5% — nuova attività</option>
         </select>
       </div>
-      <div id="ra85" class="ralert yw"><span>⚠️</span><div><strong>Attenzione:</strong> superi €85.000 — uscita dal regime dall'anno successivo.</div></div>
-      <div id="ra100" class="ralert rd"><span>🚫</span><div><strong>Uscita immediata:</strong> oltre €100.000 perdi il regime nell'anno stesso (art. 1 c. 71 L. 190/2014).</div></div>
+      <div id="ra100" class="ralert rd"><span>🚫</span><div><strong>Attenzione:</strong> superi €100.000 — uscita dal regime forfettario.</div></div>
       <div class="crow">
         <span class="clabel">Cassa previdenziale</span>
         <select class="cinput" id="cs" onchange="onCs(${item.q})">
@@ -333,13 +342,21 @@ function show(code){
           <option value="alt">Altra cassa</option>
         </select>
       </div>
+      <div class="crow" id="gs-al-row" style="display:none">
+        <span class="clabel">Copertura previdenziale GS</span>
+        <select class="cinput" id="gs-al" onchange="updateInps(${item.q})">
+          <option value="0.2623">26,23% — senza altra copertura</option>
+          <option value="0.24">24% — con altra copertura pensionistica</option>
+        </select>
+      </div>
+      <div class="inps-box" id="inps-box"></div>
       <div class="crow">
-        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">importo lordo di competenza</small></span>
+        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">lordo di competenza · per INPS: auto-compilato</small></span>
         <input class="cinput" id="pr" type="number" placeholder="Es. 3.500" min="0" step="100" oninput="calc(${item.q})"/>
       </div>
       <div class="check-rid" id="cr35">
         <input type="checkbox" id="rd" onchange="calc(${item.q})">
-        <label for="rd"><strong>Riduzione 35% startup</strong> — primi 3 anni INPS artigiani/commercianti</label>
+        <label for="rd"><strong>Riduzione 35% startup</strong> — INPS artigiani/commercianti</label>
       </div>
       <div class="cres" id="cr">
         <div class="crow2"><span>Ricavi lordi</span><span id="r1"></span></div>
@@ -379,9 +396,7 @@ function calc(q){
   const cs=csEl?csEl.value:'';
   const isArtCom=cs==='art'||cs==='com';
   const cr=document.getElementById('cr');
-  const a85=document.getElementById('ra85');
   const a100=document.getElementById('ra100');
-  if(a85) a85.classList.toggle('on',ricavi>85000&&ricavi<=100000);
   if(a100) a100.classList.toggle('on',ricavi>100000);
   if(!ricavi||ricavi<=0){cr.style.display='none';return;}
   const riduzione=isArtCom&&rid35?contribLordi*0.35:0;
@@ -415,6 +430,68 @@ function onCs(q){
   const isArtCom=cs&&(cs.value==='art'||cs.value==='com');
   if(cr35) cr35.classList.toggle('on',isArtCom);
   if(!isArtCom){const rd=document.getElementById('rd');if(rd)rd.checked=false;}
+  updateInps(q);
+}
+
+function updateInps(q){
+  const csEl=document.getElementById('cs');
+  const box=document.getElementById('inps-box');
+  const gsRow=document.getElementById('gs-al-row');
+  const prEl=document.getElementById('pr');
+  if(!csEl||!box) return calc(q);
+  const cs=csEl.value;
+  const ricavi=parseFloat(document.getElementById('ri').value)||0;
+  const reddito=ricavi*q/100;
+  const f=v=>v.toLocaleString('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+  const fp=v=>v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  // Mostra/nascondi riga aliquota GS
+  if(gsRow) gsRow.style.display=cs==='sep'?'':'none';
+
+  const isInps=cs==='sep'||cs==='art'||cs==='com';
+  if(!isInps||ricavi<=0){
+    box.innerHTML='';box.classList.remove('on');
+    return calc(q);
+  }
+
+  let contrib=0;
+  let rows=[];
+
+  if(cs==='sep'){
+    const gsAlEl=document.getElementById('gs-al');
+    const aliq=gsAlEl?parseFloat(gsAlEl.value):0.2623;
+    contrib=reddito*aliq;
+    rows=[
+      {l:'Reddito forfettario',v:f(reddito)},
+      {l:'× Aliquota GS ('+fp(aliq*100)+'%)',v:null},
+      {l:'Contributi Gestione Separata',v:f(contrib),tot:true}
+    ];
+  } else {
+    const p=cs==='art'
+      ?{fisso:4208,minimale:18555,aliq:0.24,nome:'Artigiani'}
+      :{fisso:4284,minimale:18555,aliq:0.2448,nome:'Commercianti'};
+    const eccedente=Math.max(0,reddito-p.minimale);
+    const variabile=eccedente*p.aliq;
+    contrib=p.fisso+variabile;
+    rows=[
+      {l:'Reddito forfettario',v:f(reddito)},
+      {l:'Contributo fisso (reddito minimale)',v:f(p.fisso)},
+    ];
+    if(reddito>p.minimale){
+      rows.push({l:'Eccedente minimale ('+f(eccedente)+') × '+fp(p.aliq*100)+'%',v:f(variabile)});
+    } else {
+      rows.push({l:'Reddito ≤ minimale (€'+p.minimale.toLocaleString('it-IT')+') — nessuna quota variabile',v:null,note:true});
+    }
+    rows.push({l:'Totale contributi lordi',v:f(contrib),tot:true});
+  }
+
+  box.innerHTML='<div class="inps-box-title">📊 Calcolo INPS 2025 — valori indicativi</div>'+
+    rows.map(r=>'<div class="inps-row'+(r.tot?' tot':'')+(r.note?' note':'')+'"><span>'+r.l+'</span>'+(r.v?'<span>'+r.v+'</span>':'<span></span>')+'</div>').join('')+
+    '<div class="inps-box-foot">⚠️ Valori 2025 indicativi. Il contributo fisso è dovuto anche sotto il minimale. I valori esatti variano in base alla circolare INPS annuale.</div>';
+  box.classList.add('on');
+
+  // Pre-compila il campo contributi (lordo, prima di eventuali riduzioni)
+  if(prEl) prEl.value=Math.round(contrib);
   calc(q);
 }
 
