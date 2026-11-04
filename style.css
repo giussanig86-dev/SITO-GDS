@@ -10,7 +10,7 @@
   --border: rgba(255,255,255,0.06);
   --border2: rgba(255,255,255,0.10);
   --text: #e8e8ed;
-  --muted: #6e6e7a;
+  --muted: #888894;
   --muted2: #9898a6;
   --blue: #4285F4;
   --red: #EA4335;
@@ -95,10 +95,12 @@ nav {
 .nav-cta {
   background: var(--blue); color: #fff !important;
   padding: 9px 20px; border-radius: 8px;
-  font-weight: 500 !important; font-size: 13px !important;
-  transition: opacity 0.2s !important;
+  font-weight: 600 !important; font-size: 13px !important;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.15s var(--ease-out) !important;
 }
-.nav-cta:hover { opacity: 0.85 !important; }
+.nav-cta:hover { opacity: 0.88 !important; }
+.nav-cta:active { transform: scale(0.97) !important; }
 
 /* Hamburger mobile */
 .nav-hamburger {
@@ -127,6 +129,7 @@ section { position: relative; z-index: 1; padding: 72px 48px; }
 .s-tag {
   font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
   text-transform: uppercase; color: var(--blue); margin-bottom: 14px;
+  padding-left: 10px; border-left: 2px solid var(--blue);
 }
 .s-title {
   font-size: clamp(26px, 4vw, 42px); font-weight: 800;
@@ -223,6 +226,13 @@ footer {
 /* — SCROLLBAR — */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* — FOCUS — */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 
 /* — REDUCED MOTION — */
 @media (prefers-reduced-motion: reduce) {
