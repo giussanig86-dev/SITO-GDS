@@ -78,6 +78,22 @@ select.cinput{width:auto}
 .crow2 span:last-child{font-weight:700}
 .crow2.tot span:first-child{color:var(--blue);font-weight:700}
 .crow2.tot span:last-child{color:var(--blue);font-size:16px}
+.crow2.rid span:first-child{color:var(--orange,#FF6D00)}
+.crow2.rid span:last-child{color:var(--orange,#FF6D00)}
+.crow2.disc{border-top:1px solid rgba(255,255,255,.08) !important;margin-top:6px;padding-top:8px}
+.crow2.disc span:first-child{color:var(--muted);font-style:italic;font-size:11px}
+.crow2.disc span:last-child{display:none}
+.check-rid{display:none;align-items:center;gap:10px;margin-bottom:10px}
+.check-rid.on{display:flex}
+.check-rid input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:#FF6D00;flex-shrink:0}
+.check-rid label{font-size:12px;color:var(--muted2);cursor:pointer;line-height:1.4}
+.check-rid label strong{color:#FF6D00}
+.ralert{border-radius:8px;padding:9px 13px;font-size:12px;display:none;gap:8px;margin-bottom:10px;line-height:1.5}
+.ralert.on{display:flex}
+.ralert.yw{background:rgba(251,188,5,.07);border:1px solid rgba(251,188,5,.25);color:var(--muted2)}
+.ralert.yw strong{color:var(--yellow)}
+.ralert.rd{background:rgba(234,67,53,.08);border:1px solid rgba(234,67,53,.25);color:var(--muted2)}
+.ralert.rd strong{color:var(--red)}
 .dsec{padding:24px 32px;border-top:1px solid var(--border);background:var(--surface2)}
 .dsec h3{font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
 .dtext{font-size:13px;color:var(--muted2);line-height:1.75;white-space:pre-line}
@@ -295,25 +311,47 @@ function show(code){
       <h3>🧮 Simulatore fiscale</h3>
       <div class="crow">
         <span class="clabel">Ricavi annui (€)</span>
-        <input class="cinput" id="ri" type="number" placeholder="Es. 40.000" min="0" max="85000" oninput="calc(${item.q})"/>
+        <input class="cinput" id="ri" type="number" placeholder="Es. 40.000" min="0" oninput="calc(${item.q})"/>
         <select class="cinput" id="al" onchange="calc(${item.q})">
           <option value="15">15% — ordinaria</option>
           <option value="5">5% — nuova attività</option>
         </select>
       </div>
+      <div id="ra85" class="ralert yw"><span>⚠️</span><div><strong>Attenzione:</strong> superi €85.000 — uscita dal regime dall'anno successivo.</div></div>
+      <div id="ra100" class="ralert rd"><span>🚫</span><div><strong>Uscita immediata:</strong> oltre €100.000 perdi il regime nell'anno stesso (art. 1 c. 71 L. 190/2014).</div></div>
       <div class="crow">
-        <span class="clabel">Contributi previd. (€)</span>
-        <input class="cinput" id="pr" type="number" placeholder="Es. 3.500 (importo annuo)" min="0" step="100" oninput="calc(${item.q})"/>
+        <span class="clabel">Cassa previdenziale</span>
+        <select class="cinput" id="cs" onchange="onCs(${item.q})">
+          <option value="sep">INPS — Gestione Separata</option>
+          <option value="art">INPS — Artigiani</option>
+          <option value="com">INPS — Commercianti</option>
+          <option value="for">Cassa Forense (Avvocati)</option>
+          <option value="enp">ENPAM (Medici/Odontoiatri)</option>
+          <option value="ina">INARCASSA (Ingegneri/Architetti)</option>
+          <option value="cnp">CNPADC (Dottori Commercialisti)</option>
+          <option value="acl">ENPACL (Consulenti del Lavoro)</option>
+          <option value="alt">Altra cassa</option>
+        </select>
+      </div>
+      <div class="crow">
+        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">importo lordo di competenza</small></span>
+        <input class="cinput" id="pr" type="number" placeholder="Es. 3.500" min="0" step="100" oninput="calc(${item.q})"/>
+      </div>
+      <div class="check-rid" id="cr35">
+        <input type="checkbox" id="rd" onchange="calc(${item.q})">
+        <label for="rd"><strong>Riduzione 35% startup</strong> — primi 3 anni INPS artigiani/commercianti</label>
       </div>
       <div class="cres" id="cr">
         <div class="crow2"><span>Ricavi lordi</span><span id="r1"></span></div>
         <div class="crow2"><span>Reddito forfettario (×${item.q}%)</span><span id="r2"></span></div>
-        <div class="crow2"><span>Contributi previdenziali</span><span id="r3"></span></div>
+        <div class="crow2"><span>Contributi versati (lordi)</span><span id="r3"></span></div>
+        <div class="crow2 rid" id="r3b-row" style="display:none"><span>di cui riduzione 35%</span><span id="r3b"></span></div>
+        <div class="crow2" id="r3c-row" style="display:none"><span>Contributi netti deducibili</span><span id="r3c"></span></div>
         <div class="crow2"><span>Base imponibile netta</span><span id="r4"></span></div>
         <div class="crow2"><span>Imposta sostitutiva</span><span id="r5"></span></div>
         <div class="crow2 tot"><span>✅ Netto stimato</span><span id="r6"></span></div>
+        <div class="crow2 disc"><span>📌 Importi al lordo degli acconti già versati nell'anno</span><span></span></div>
       </div>
-      <p style="font-size:11px;color:var(--muted);margin-top:10px">⚠️ Calcolo indicativo. Inserire l'importo annuo dei contributi previdenziali effettivamente versati (INPS, cassa ordine, ecc.). L'importo varia in base al minimale e alla posizione previdenziale personale.</p>
     </div>
 
     <div class="dsec">
@@ -332,23 +370,52 @@ function show(code){
 }
 
 function calc(q){
-  const ricavi=parseFloat(document.getElementById('ri').value);
+  const ricavi=parseFloat(document.getElementById('ri').value)||0;
   const al=parseFloat(document.getElementById('al').value)/100;
-  const inps=parseFloat(document.getElementById('pr').value)||0;
+  const contribLordi=parseFloat(document.getElementById('pr').value)||0;
+  const rdEl=document.getElementById('rd');
+  const csEl=document.getElementById('cs');
+  const rid35=rdEl&&rdEl.checked;
+  const cs=csEl?csEl.value:'';
+  const isArtCom=cs==='art'||cs==='com';
   const cr=document.getElementById('cr');
+  const a85=document.getElementById('ra85');
+  const a100=document.getElementById('ra100');
+  if(a85) a85.classList.toggle('on',ricavi>85000&&ricavi<=100000);
+  if(a100) a100.classList.toggle('on',ricavi>100000);
   if(!ricavi||ricavi<=0){cr.style.display='none';return;}
+  const riduzione=isArtCom&&rid35?contribLordi*0.35:0;
+  const contribNetti=contribLordi-riduzione;
   const redd=ricavi*q/100;
-  const base=Math.max(0,redd-inps);
+  const base=Math.max(0,redd-contribNetti);
   const imp=base*al;
-  const netto=ricavi-inps-imp;
+  const netto=ricavi-contribNetti-imp;
   const f=v=>v.toLocaleString('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0});
   document.getElementById('r1').textContent=f(ricavi);
   document.getElementById('r2').textContent=f(redd);
-  document.getElementById('r3').textContent=f(inps);
+  document.getElementById('r3').textContent=f(contribLordi);
+  const r3bRow=document.getElementById('r3b-row');
+  const r3cRow=document.getElementById('r3c-row');
+  if(rid35&&riduzione>0){
+    r3bRow.style.display='';r3cRow.style.display='';
+    document.getElementById('r3b').textContent='− '+f(riduzione);
+    document.getElementById('r3c').textContent=f(contribNetti);
+  } else {
+    r3bRow.style.display='none';r3cRow.style.display='none';
+  }
   document.getElementById('r4').textContent=f(base);
   document.getElementById('r5').textContent=f(imp);
   document.getElementById('r6').textContent=f(netto);
   cr.style.display='block';
+}
+
+function onCs(q){
+  const cs=document.getElementById('cs');
+  const cr35=document.getElementById('cr35');
+  const isArtCom=cs&&(cs.value==='art'||cs.value==='com');
+  if(cr35) cr35.classList.toggle('on',isArtCom);
+  if(!isArtCom){const rd=document.getElementById('rd');if(rd)rd.checked=false;}
+  calc(q);
 }
 
 
