@@ -366,6 +366,7 @@ function show(code){
         <div class="crow2"><span>Contributi previdenziali deducibili</span><span id="r3"></span></div>
         <div class="crow2"><span>Base imponibile netta</span><span id="r4"></span></div>
         <div class="crow2"><span>Imposta sostitutiva</span><span id="r5"></span></div>
+        <div class="crow2"><span>Contributi previdenziali dovuti</span><span id="r3x"></span></div>
         <div class="crow2 tot"><span>✅ Netto stimato</span><span id="r6"></span></div>
         <div class="crow2 disc"><span>📌 Importi al lordo degli acconti già versati nell'anno</span><span></span></div>
       </div>
@@ -404,6 +405,7 @@ function calc(q){
   document.getElementById('r3').textContent=f(contrib);
   document.getElementById('r4').textContent=f(base);
   document.getElementById('r5').textContent=f(imp);
+  document.getElementById('r3x').textContent=f(contrib);
   document.getElementById('r6').textContent=f(netto);
   cr.style.display='block';
 }
