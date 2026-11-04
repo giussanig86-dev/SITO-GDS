@@ -103,6 +103,8 @@ select.cinput{width:auto}
 .inps-row span:last-child{font-weight:600;font-family:'Courier New',monospace;font-size:12px;flex-shrink:0}
 .inps-row.tot span{color:var(--blue);font-weight:700}
 .inps-row.note span{color:var(--muted);font-style:italic;font-weight:400}
+.inps-row.rid span:first-child{color:#FF6D00}
+.inps-row.rid span:last-child{color:#FF6D00}
 .inps-box-foot{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;border-top:1px solid rgba(255,255,255,.06);padding-top:6px}
 .dsec{padding:24px 32px;border-top:1px solid var(--border);background:var(--surface2)}
 .dsec h3{font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
@@ -342,6 +344,10 @@ function show(code){
           <option value="alt">Altra cassa</option>
         </select>
       </div>
+      <div class="check-rid" id="cr35">
+        <input type="checkbox" id="rd" onchange="updateInps(${item.q})">
+        <label for="rd"><strong>Riduzione 35% forfettario</strong> — INPS artigiani/commercianti</label>
+      </div>
       <div class="crow" id="gs-al-row" style="display:none">
         <span class="clabel">Copertura previdenziale GS</span>
         <select class="cinput" id="gs-al" onchange="updateInps(${item.q})">
@@ -351,19 +357,13 @@ function show(code){
       </div>
       <div class="inps-box" id="inps-box"></div>
       <div class="crow">
-        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">lordo di competenza · per INPS: auto-compilato</small></span>
+        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">per INPS: auto-compilato · modificabile</small></span>
         <input class="cinput" id="pr" type="number" placeholder="Es. 3.500" min="0" step="100" oninput="calc(${item.q})"/>
-      </div>
-      <div class="check-rid" id="cr35">
-        <input type="checkbox" id="rd" onchange="calc(${item.q})">
-        <label for="rd"><strong>Riduzione 35% startup</strong> — INPS artigiani/commercianti</label>
       </div>
       <div class="cres" id="cr">
         <div class="crow2"><span>Ricavi lordi</span><span id="r1"></span></div>
         <div class="crow2"><span>Reddito forfettario (×${item.q}%)</span><span id="r2"></span></div>
-        <div class="crow2"><span>Contributi versati (lordi)</span><span id="r3"></span></div>
-        <div class="crow2 rid" id="r3b-row" style="display:none"><span>di cui riduzione 35%</span><span id="r3b"></span></div>
-        <div class="crow2" id="r3c-row" style="display:none"><span>Contributi netti deducibili</span><span id="r3c"></span></div>
+        <div class="crow2"><span>Contributi previdenziali deducibili</span><span id="r3"></span></div>
         <div class="crow2"><span>Base imponibile netta</span><span id="r4"></span></div>
         <div class="crow2"><span>Imposta sostitutiva</span><span id="r5"></span></div>
         <div class="crow2 tot"><span>✅ Netto stimato</span><span id="r6"></span></div>
@@ -389,35 +389,19 @@ function show(code){
 function calc(q){
   const ricavi=parseFloat(document.getElementById('ri').value)||0;
   const al=parseFloat(document.getElementById('al').value)/100;
-  const contribLordi=parseFloat(document.getElementById('pr').value)||0;
-  const rdEl=document.getElementById('rd');
-  const csEl=document.getElementById('cs');
-  const rid35=rdEl&&rdEl.checked;
-  const cs=csEl?csEl.value:'';
-  const isArtCom=cs==='art'||cs==='com';
+  const contrib=parseFloat(document.getElementById('pr').value)||0;
   const cr=document.getElementById('cr');
   const a100=document.getElementById('ra100');
   if(a100) a100.classList.toggle('on',ricavi>100000);
   if(!ricavi||ricavi<=0){cr.style.display='none';return;}
-  const riduzione=isArtCom&&rid35?contribLordi*0.35:0;
-  const contribNetti=contribLordi-riduzione;
   const redd=ricavi*q/100;
-  const base=Math.max(0,redd-contribNetti);
+  const base=Math.max(0,redd-contrib);
   const imp=base*al;
-  const netto=ricavi-contribNetti-imp;
+  const netto=ricavi-contrib-imp;
   const f=v=>v.toLocaleString('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0});
   document.getElementById('r1').textContent=f(ricavi);
   document.getElementById('r2').textContent=f(redd);
-  document.getElementById('r3').textContent=f(contribLordi);
-  const r3bRow=document.getElementById('r3b-row');
-  const r3cRow=document.getElementById('r3c-row');
-  if(rid35&&riduzione>0){
-    r3bRow.style.display='';r3cRow.style.display='';
-    document.getElementById('r3b').textContent='− '+f(riduzione);
-    document.getElementById('r3c').textContent=f(contribNetti);
-  } else {
-    r3bRow.style.display='none';r3cRow.style.display='none';
-  }
+  document.getElementById('r3').textContent=f(contrib);
   document.getElementById('r4').textContent=f(base);
   document.getElementById('r5').textContent=f(imp);
   document.getElementById('r6').textContent=f(netto);
@@ -472,7 +456,11 @@ function updateInps(q){
       :{fisso:4284,minimale:18555,aliq:0.2448,nome:'Commercianti'};
     const eccedente=Math.max(0,reddito-p.minimale);
     const variabile=eccedente*p.aliq;
-    contrib=p.fisso+variabile;
+    const lordo=p.fisso+variabile;
+    const rdEl=document.getElementById('rd');
+    const rid35=rdEl&&rdEl.checked;
+    const riduzione=rid35?lordo*0.35:0;
+    contrib=lordo-riduzione;
     rows=[
       {l:'Reddito forfettario',v:f(reddito)},
       {l:'Contributo fisso (reddito minimale)',v:f(p.fisso)},
@@ -482,15 +470,21 @@ function updateInps(q){
     } else {
       rows.push({l:'Reddito ≤ minimale (€'+p.minimale.toLocaleString('it-IT')+') — nessuna quota variabile',v:null,note:true});
     }
-    rows.push({l:'Totale contributi lordi',v:f(contrib),tot:true});
+    rows.push({l:'Contributi lordi',v:f(lordo)});
+    if(rid35){
+      rows.push({l:'Riduzione 35% forfettario',v:'− '+f(riduzione),rid:true});
+      rows.push({l:'Contributi netti (a saldo)',v:f(contrib),tot:true});
+    } else {
+      rows.push({l:'Totale contributi',v:f(contrib),tot:true});
+    }
   }
 
   box.innerHTML='<div class="inps-box-title">📊 Calcolo INPS 2025 — valori indicativi</div>'+
-    rows.map(r=>'<div class="inps-row'+(r.tot?' tot':'')+(r.note?' note':'')+'"><span>'+r.l+'</span>'+(r.v?'<span>'+r.v+'</span>':'<span></span>')+'</div>').join('')+
+    rows.map(r=>'<div class="inps-row'+(r.tot?' tot':'')+(r.note?' note':'')+(r.rid?' rid':'')+'"><span>'+r.l+'</span>'+(r.v?'<span>'+r.v+'</span>':'<span></span>')+'</div>').join('')+
     '<div class="inps-box-foot">⚠️ Valori 2025 indicativi. Il contributo fisso è dovuto anche sotto il minimale. I valori esatti variano in base alla circolare INPS annuale.</div>';
   box.classList.add('on');
 
-  // Pre-compila il campo contributi (lordo, prima di eventuali riduzioni)
+  // Pre-compila con il valore netto (a saldo dopo eventuale riduzione)
   if(prEl) prEl.value=Math.round(contrib);
   calc(q);
 }
