@@ -357,7 +357,7 @@ function show(code){
       </div>
       <div class="inps-box" id="inps-box"></div>
       <div class="crow">
-        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">per INPS: auto-compilato · modificabile</small></span>
+        <span class="clabel">Contributi versati (€)<br><small style="font-size:10px;color:var(--muted)">Inserisci i contributi versati nel periodo di riferimento, comprensivi sia degli acconti sia del saldo</small></span>
         <input class="cinput" id="pr" type="number" placeholder="Es. 3.500" min="0" step="100" oninput="calc(${item.q})"/>
       </div>
       <div class="cres" id="cr">
@@ -405,8 +405,9 @@ function calc(q){
   document.getElementById('r3').textContent=f(contrib);
   document.getElementById('r4').textContent=f(base);
   document.getElementById('r5').textContent=f(imp);
-  document.getElementById('r3x').textContent=f(contrib);
-  document.getElementById('r6').textContent=f(netto);
+  const inpsNetto=window._inpsNetto||contrib;
+  document.getElementById('r3x').textContent=f(inpsNetto);
+  document.getElementById('r6').textContent=f(ricavi-inpsNetto-imp);
   cr.style.display='block';
 }
 
@@ -437,6 +438,7 @@ function updateInps(q){
   const isInps=cs==='sep'||cs==='art'||cs==='com';
   if(!isInps||ricavi<=0){
     box.innerHTML='';box.classList.remove('on');
+    window._inpsNetto=null;
     return calc(q);
   }
 
@@ -486,8 +488,8 @@ function updateInps(q){
     '<div class="inps-box-foot">⚠️ Valori 2025 indicativi. Il contributo fisso è dovuto anche sotto il minimale. I valori esatti variano in base alla circolare INPS annuale.</div>';
   box.classList.add('on');
 
-  // Pre-compila con il valore netto (a saldo dopo eventuale riduzione)
-  if(prEl) prEl.value=Math.round(contrib);
+  // Salva il valore netto calcolato per r3x (non auto-compila il campo)
+  window._inpsNetto=contrib;
   calc(q);
 }
 
