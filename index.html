@@ -80,12 +80,14 @@
     border-radius: 16px; padding: 32px 24px;
     display: flex; flex-direction: column; align-items: center;
     gap: 16px; cursor: pointer; text-decoration: none;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; text-align: center;
+    transition: transform 0.2s var(--ease-out), border-color 0.15s ease, box-shadow 0.2s var(--ease-out); text-align: center;
   }
-  .path-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.15);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  @media (hover: hover) and (pointer: fine) {
+    .path-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.15);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
   }
   .path-icon { font-size: 48px; line-height: 1; filter: grayscale(0.2); }
   .path-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
@@ -111,9 +113,10 @@
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 100px; padding: 8px 18px;
     font-size: 13px; color: var(--text); text-decoration: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.15s ease, background 0.15s ease;
   }
-  .contact-chip:hover { border-color: rgba(255,255,255,0.15); }
+  .contact-chip:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); }
+  .contact-chip:active { transform: scale(0.97); }
   .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
   /* — CONTACT FORM — */

@@ -33,13 +33,15 @@
     background: var(--surface); border: 1px solid var(--border2);
     border-radius: 20px; padding: 40px 36px;
     display: flex; flex-direction: column; gap: 16px;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    transition: transform 0.2s var(--ease-out), border-color 0.15s ease, box-shadow 0.2s var(--ease-out);
     text-decoration: none;
   }
-  .tool-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.15);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  @media (hover: hover) and (pointer: fine) {
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
   }
   .tool-icon { font-size: 52px; line-height: 1; }
   .tool-badge {
